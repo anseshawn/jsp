@@ -9,7 +9,7 @@
 		// 로그인시 아이디저장시킨다고 체크하면 쿠키에 아이디 저장하고, 그렇지 않으면 쿠키에서 아이디를 제거한다.
 		String idSave = request.getParameter("idSave")==null ? "off" : "on";
 		Cookie cookieMid = new Cookie("cMid", mid);
-		cookieMid.setPath("/");
+		cookieMid.setPath("/"); // 가장 상위에 쿠키값을 저장하겠다는 의미 (서블릿과 jsp를 오가게 되면 경로가 달라지므로 필요)
 		if(idSave.equals("on")) {
 			cookieMid.setMaxAge(60*60*24*7);	// 쿠키의 만료시간은 1주일로 한다.
 		}

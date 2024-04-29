@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
-	String mid = request.getParameter("mid");
+	String mid = request.getParameter("mid");		// 앞부분에서 get방식(쿼리스트링방식)으로 값을 보냈기 때문에 request로 값을 요청해야 함
 	pageContext.setAttribute("mid", mid);
 %>
 <!DOCTYPE html>

@@ -4,7 +4,7 @@
 	// 쿠키를 검색해서 cMid가 있을때 가져와서 아이디입력창에 뿌릴수 있게 한다.
 	Cookie[] cookies = request.getCookies();
 
-	if(cookies != null) {
+	if(cookies != null) { // 저장된 쿠키가 있으면 작동하도록 if문 먼저
 		for(int i=0; i<cookies.length; i++) {
 			if(cookies[i].getName().equals("cMid")) {
 				pageContext.setAttribute("mid", cookies[i].getValue());
