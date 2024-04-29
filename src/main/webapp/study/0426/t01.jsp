@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file = "/include/certification.jsp" %>
 <%
 	String hostIP = request.getRemoteAddr();
 	// 서버 저장소(Server Storage): request, pageContext, Session, Application
