@@ -110,13 +110,28 @@
 			</c:if>
 		</c:forEach>
 		str 변수의 'o'문자의 개수는 ${cnt} 개 있습니다.<br/>
+		<br/>
 		
 		4-4. str 변수의 'o'문자의 2번째 위치값 만 출력하시오?<br/>
+		<c:set var="cnt" value="0"/>
+		<c:forEach var="i" begin="0" end="${fn:length(str)-1}">
+			<c:if test="${fn:substring(str,i,i+1) == 'o'}">
+				<c:set var="cnt" value="${cnt+1}"/>
+				<c:if test="${cnt == 2}">
+					'o'문자의 ${cnt}번째 위치값 : ${i}<br/>
+				</c:if>
+			</c:if>
+		</c:forEach>
+		<br/><br/>
 		
-		<br/>
 		4-5. str변수의 'o'문자의 마지막 위치값을 출력하시오? <br/>
-		
-		<br/>
+		<c:forEach var="i" begin="0" end="${fn:length(str)-1}">
+			<c:if test="${fn:substring(str,i,i+1) == 'o'}">
+			<c:set var="cnt" value="${i}"/>
+			</c:if>
+		</c:forEach>
+		마지막 'o'문자의 위치값? ${cnt}<br/>				
+		<br/><br/>
 		<hr/>
 		5. 문자열추출(substringBefore() / substringAfter())><br/>
 		문자 'o'앞의 문자열을 출력? ${fn:substringBefore(str,'o')}<br/>

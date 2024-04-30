@@ -6,7 +6,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Insert</title>
+	<title>ex2_gugudan.jsp</title>
   <%@ include file = "/include/bs4.jsp" %>
 </head>
 <body>
@@ -34,7 +34,7 @@
 	    <div class="input-group-prepend">
 	      <span class="input-group-text">출력할 단</span>
 	    </div>
-	    <input type="number" name="danSu" id="danSu" class="form-control">
+	    <input type="number" name="danSu" id="danSu" value="1" class="form-control">
 	  </div>
 	  <div>
 	  	<input type="submit" value="출력하기" class="btn btn-success form-control" />	  
@@ -50,20 +50,24 @@
 	</c:if>
 	<c:set var="danSu" value="${param.danSu}"/>
 	<table class="table table-bordered">
-		<c:set var="cnt" value="0"/>
-		<c:forEach var="i" begin="${startDan}" end="${endDan}">
-			<c:if test="${cnt % danSu+0 != 0 }">
-				<tr>
-					<c:set var="cnt" value="${cnt+1}"/>
+		<c:forEach var="i" begin="${startDan}" end="${endDan}" varStatus="st">
+			<tr>
+				<c:if test="${st.count % danSu != 0}">
 					<td>* * ${i}단 * *<br/>
 					<c:forEach var="j" begin="1" end="9">
 						${i} * ${j} = ${i*j}<br/>
 					</c:forEach>
-					</td>			
+					</td>
+				</c:if>
+			</tr>
+			<c:if test="${st.count % danSu == 0 }">
+				<tr>
+					<td>* * ${i}단 * *<br/>
+					<c:forEach var="j" begin="1" end="9">
+						${i} * ${j} = ${i*j}<br/>
+					</c:forEach>
+					</td>
 				</tr>
-			</c:if>
-			<c:if test="${cnt % danSu == 0 }">
-				<tr></tr>
 			</c:if>
 		</c:forEach>
 	</table>
