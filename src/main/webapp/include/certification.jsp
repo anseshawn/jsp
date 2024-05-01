@@ -5,7 +5,7 @@
 	if(mid.equals("")) {
 		out.println("<script>");
 		out.println("alert('로그인 후 사용하세요.');");
-		out.println("location.href='"+request.getContextPath()+"/study/0428_Login/login.jsp';");
+		out.println("location.href='"+request.getContextPath()+"/study/database/login.jsp';");
 		out.println("</script>");
 	}
 %>
