@@ -138,5 +138,29 @@ public class LoginDAO {
 		}
 		return res;
 	}
+
+	// 메인에 회원 5명 노출
+	public ArrayList<LoginVO> getMainLoginList() {
+		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
+		try {
+			sql = "select idx,mid,name,age from hoewon order by idx desc limit 5";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vo = new LoginVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
 	
 }

@@ -1,4 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="java.util.Date"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <%
 	int sCount = session.getAttribute("sCount")==null ? 0 : (int)session.getAttribute("sCount");
 
@@ -34,7 +38,7 @@
       <h2>About Me(${sMid})</h2>
       <h5>Photo of me:</h5>
       <div class="fakeimg">Fake Image</div>
-      <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+      <p>현재 접속 아이디는 ${sMid}입니다.</p>
       <h3>Some Links</h3>
       <p>Lorem ipsum dolor sit ame.</p>
       <ul class="nav nav-pills flex-column">
@@ -54,17 +58,33 @@
       <hr class="d-sm-none">
     </div>
     <div class="col-sm-8">
-      <h2>TITLE HEADING</h2>
-      <h5>Title description, Dec 7, 2017</h5>
-      <div class="fakeimg">Fake Image</div>
-      <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+      <h2>최근 가입 회원 목록</h2>
+      <c:set var="today" value="${Date()}" /><br/> 
+      <h5>Today : <fmt:formatDate value="${today}" pattern="MM dd, yyyy"/></h5>
+      <p><input type="button" value="리스트보기" onclick="location.href='${ctp}/study/database/MainLoginList';" class="btn btn-primary" /></p>
+      <table class="table table-hover text-center">
+      	<tr>
+      		<th>가입번호</th>
+      		<th>아이디</th>
+      		<th>이름</th>
+      		<th>나이</th>
+      	</tr>
+      	<c:forEach var="vo" items="${vos}" varStatus="st">
+	      	<tr>
+	      		<td>${vo.idx}</td>
+	      		<td>${vo.mid}</td>
+	      		<td>${vo.name}</td>
+	      		<td>${vo.age}</td>
+	      	</tr>
+      	</c:forEach>
+      	<tr><td colspan="4" class="m-0 p-0"></td></tr>
+      </table>
       <br>
       <h2>TITLE HEADING</h2>
       <h5>Title description, Sep 2, 2017</h5>
       <div class="fakeimg">Fake Image</div>
       <p>Some text..</p>
-      <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+      <p>text sample.</p>
     </div>
   </div>
 </div>
