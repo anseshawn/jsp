@@ -1,4 +1,4 @@
-package study.database;
+package common;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,15 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/study/database/MainLoginList")
-public class MainLoginList extends HttpServlet {
+import study.database.LoginDAO;
+import study.database.LoginVO;
+
+@WebServlet("/Main")
+public class Main extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		LoginDAO dao = new LoginDAO();
 		
-		ArrayList<LoginVO> vos = dao.getMainLoginList();
+		ArrayList<LoginVO> recentVos = dao.getRecentFiveMember();
 		
-		request.setAttribute("vos", vos);
+		request.setAttribute("recentVos", recentVos);
 		
 		String viewPage = "/main/main.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);

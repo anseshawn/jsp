@@ -10,17 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/study/database/MainLoginList")
-public class MainLoginList extends HttpServlet {
+@WebServlet("/database/LoginSearch")
+public class LoginSearch extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		LoginDAO dao = new LoginDAO();
+		String name = request.getParameter("name")==null ? "" : request.getParameter("name");
 		
-		ArrayList<LoginVO> vos = dao.getMainLoginList();
+		LoginDAO dao = new LoginDAO();
+		ArrayList<LoginVO> vos;
+		
+		vos = dao.getLoginSearch(name);			
 		
 		request.setAttribute("vos", vos);
 		
-		String viewPage = "/main/main.jsp";
+		String viewPage = "/study/database/loginMain.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);
 	}

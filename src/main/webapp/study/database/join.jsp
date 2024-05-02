@@ -50,7 +50,7 @@
 	      <td colspan="2">
 	        <input type="submit" value="회원가입" class="btn btn-primary mr-2"/>
 	        <input type="reset" value="다시입력" class="btn btn-warning mr-2"/>
-	        <input type="button" value="돌아가기" onclick="location.herf='login.jsp';" class="btn btn-danger mr-4"/>
+	        <input type="button" value="돌아가기" onclick="location.href='login.jsp';" class="btn btn-danger mr-4"/>
 	      </td>
 	    </tr>
 	  </table>

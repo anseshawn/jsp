@@ -24,7 +24,6 @@ public class LoginDAO {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, password); 
-			System.out.println("연결 성공...");
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 검색 실패 : "+e.getMessage());
 		} catch (SQLException e) {
@@ -139,7 +138,7 @@ public class LoginDAO {
 		return res;
 	}
 
-	// 메인에 회원 5명 노출
+	// 메인에 회원 5명 노출(숙제버전)
 	public ArrayList<LoginVO> getMainLoginList() {
 		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
 		try {
@@ -161,6 +160,129 @@ public class LoginDAO {
 			rsClose();
 		}
 		return vos;
+	}
+
+	// 메인에 최근 가입회원 노출(ver.2)
+	public ArrayList<LoginVO> getRecentFiveMember() {
+		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
+		try {
+			sql = "select * from hoewon order by idx desc limit 3";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new LoginVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+				
+				vos.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
+
+	// 개별조회
+	public ArrayList<LoginVO> getLoginSearch(String name) {
+		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
+		try {
+			sql = "select * from hoewon where name like ? order by name";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "%"+name+"%");
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vo = new LoginVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+				
+				vos.add(vo);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
+
+	// idx로 회원 검색
+	public LoginVO getLoginIdxSearch(int idx) {
+		LoginVO vo = new LoginVO();
+		try {
+			sql = "select * from hoewon where idx=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, idx);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vo;
+	}
+
+	
+	// 회원 정보 수정 처리
+	public int setLoginUpdate(LoginVO vo) {
+		int res = 0;
+		try {
+			sql = "update hoewon set pwd=?,name=?,age=?,gender=?,address=? where idx=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, vo.getPwd());
+			pstmt.setString(2, vo.getName());
+			pstmt.setInt(3, vo.getAge());
+			pstmt.setString(4, vo.getGender());
+			pstmt.setString(5, vo.getAddress());
+			pstmt.setInt(6, vo.getIdx());
+			res = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			pstmtClose();
+		}
+		return res;
+	}
+
+	
+	// 회원 정보 삭제 처리
+	public int setLoginDelete(String mid) {
+		int res = 0;
+		try {
+			sql = "delete from hoewon where mid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, mid);
+			res = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			pstmtClose();
+		}
+		return res;
 	}
 	
 }

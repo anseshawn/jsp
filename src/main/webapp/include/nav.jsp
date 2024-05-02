@@ -5,7 +5,7 @@
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <%-- <a class="navbar-brand" href="<%=request.getContextPath()%>/">HOME</a> --%>
-  <a class="navbar-brand" href="http://192.168.50.58:9090/javaclass">HOME</a>
+  <a class="navbar-brand" href="http://192.168.50.58:9090/javaclass/Main">HOME</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -40,6 +40,7 @@
 			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/0430_web_xml/filter/t1_Filter.jsp">Filter한글연습</a>
 			      <%--<a class="dropdown-item" href="<%=request.getContextPath()%>/study/0430_web_xml/filter/t2_Certification.jsp">인증코드발행(관리자)</a>--%>
 			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/0430_web_xml/init/t03_init.jsp">초기값확인</a>
+			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/0430_web_xml/lifeCycle/lifeCycle2.jsp">서블릿생명주기</a>
 			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/database/LoginList">데이터베이스연습</a>
 			      <a class="dropdown-item" href="#">Link 3</a>
 			      <div class="dropdown-divider"></div>
