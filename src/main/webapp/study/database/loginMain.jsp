@@ -41,9 +41,9 @@
 	<span style="width:100px" class="float-right">
 		<select name="searchOption" class="custom-select custom-select-sm">
 	    <option selected>정렬</option>
-	    <option value="volvo">이름순</option>
-	    <option value="fiat">나이순</option>
-	    <option value="audi">가입순</option>
+	    <option value="orderName">이름순</option>
+	    <option value="orderAge">나이순</option>
+	    <option value="orderIdx">가입순</option>
   	</select>
 	</span>
 	<table class="table table-hover text-center">

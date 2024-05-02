@@ -16,12 +16,12 @@ public class FilterTest implements Filter {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 		
-		System.out.println("1. 필터 수행 전입니다.");
+//		System.out.println("1. 필터 수행 전입니다.");
 		
 		chain.doFilter(request, response);
 		// 아무것도 거르지 않고 요청이 들어오는 대로 응답하겠다는 의미
 		
-		System.out.println("2. 필터 수행 후입니다.\n");
+//		System.out.println("2. 필터 수행 후입니다.\n");
 	}
 
 }
