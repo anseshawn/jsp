@@ -284,5 +284,32 @@ public class LoginDAO {
 		}
 		return res;
 	}
+
+	// 회원 정보 정렬(이름,나이,가입일 순)
+	public ArrayList<LoginVO> getOrderedList(String option) {
+		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
+		try {
+			System.out.println("sql option:"+option);
+			sql = "select * from hoewon order by "+option;
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				vo = new LoginVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));			
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
 	
 }

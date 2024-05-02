@@ -27,6 +27,11 @@
   	function loginList() {
   		location.href="${ctp}/study/database/LoginList";
   	}
+  	
+  	function orderList() {
+  		let orderOption = document.getElementById("orderOption").value;
+  		location.href="${ctp}/study/database/LoginOrder?option="+orderOption;
+  	}
 
   </script>
 </head>
@@ -39,11 +44,11 @@
 	<hr/>
 	<input type="button" value="전체조회" onclick="loginList()" class="btn btn-primary btn-sm mb-2 float-left" />
 	<span style="width:100px" class="float-right">
-		<select name="searchOption" class="custom-select custom-select-sm">
+		<select id="orderOption" onchange="orderList()" class="custom-select custom-select-sm">
 	    <option selected>정렬</option>
-	    <option value="orderName">이름순</option>
-	    <option value="orderAge">나이순</option>
-	    <option value="orderIdx">가입순</option>
+	    <option value="name">이름순</option>
+	    <option value="age">나이순</option>
+	    <option value="idx">가입일순</option>
   	</select>
 	</span>
 	<table class="table table-hover text-center">
