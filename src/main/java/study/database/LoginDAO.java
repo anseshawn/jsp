@@ -285,13 +285,19 @@ public class LoginDAO {
 		return res;
 	}
 
-	// 회원 정보 정렬(이름,나이,가입일 순)
-	public ArrayList<LoginVO> getOrderedList(String option) {
+	// 회원 정보 정렬(이름,나이,가입일 순) (페이지추가)
+	public ArrayList<LoginVO> getOrderedList(String option, int startIndexNo, int pageSize) {
 		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
 		try {
-			System.out.println("sql option:"+option);
-			sql = "select * from hoewon order by "+option;
+//			System.out.println("sql option:"+option);
+			sql = "select * from hoewon order by "+option+" limit ?,?";
+//			sql = "select * from hoewon order by ?";
+			// 물음표는 넘어온 값을 사용할 때 사용(필드x)
+			// 현재 name, idx, age 등 바뀌고 있기 때문에 option은 변수. 필드를 변수 개념으로 빼서 사용
 			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, option);
+			pstmt.setInt(1, startIndexNo);
+			pstmt.setInt(2, pageSize);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				vo = new LoginVO();
@@ -310,6 +316,23 @@ public class LoginDAO {
 			rsClose();
 		}
 		return vos;
+	}
+
+	// 총 건수
+	public int getTotRecCnt() {
+		int totRecCnt = 0;
+		try {
+			sql="select count(*) as cnt from hoewon";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			rs.next();
+			totRecCnt = rs.getInt("cnt");
+		} catch (SQLException e) {
+			System.out.println("SQL오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return totRecCnt;
 	}
 	
 }

@@ -60,11 +60,14 @@ public class GuestDAO {
 
 	
 	// 방명록 전체 자료 리스트
-	public ArrayList<GuestVO> getGuestList() {
+	public ArrayList<GuestVO> getGuestList(int startIndexNo, int pageSize) {
 		ArrayList<GuestVO> vos = new ArrayList<GuestVO>();
 		try {
-			sql = "select * from guest order by idx desc";
+			sql = "select * from guest order by idx desc limit ?,?";
+			// 숫자를 하나만 쓰면 개수만, 두개 쓰면 시작 인덱스에서 개수
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startIndexNo);
+			pstmt.setInt(2, pageSize);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				vo = new GuestVO();
@@ -120,6 +123,23 @@ public class GuestDAO {
 			pstmtClose();
 		}
 		return res;
+	}
+
+	// 방명록 글의 총 건수 구하기
+	public int getTotRecCnt() {
+		int totRecCnt = 0;
+		try {
+			sql="select count(*) as cnt from guest";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			rs.next();
+			totRecCnt = rs.getInt("cnt");
+		} catch (SQLException e) {
+			System.out.println("SQL오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return totRecCnt;
 	}
 	
 }

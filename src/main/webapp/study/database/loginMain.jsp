@@ -30,7 +30,7 @@
   	
   	function orderList() {
   		let orderOption = document.getElementById("orderOption").value;
-  		location.href="${ctp}/study/database/LoginOrder?option="+orderOption;
+  		location.href="${ctp}/study/database/LoginList?option="+orderOption;
   	}
 
   </script>
@@ -42,13 +42,27 @@
 <div class="container">
 	<h2 class="text-center">회 원 메 인 방</h2>
 	<hr/>
+	<div class="text-right">
+		<c:if test="${pag > 1}">
+			<a href="${ctp}/study/database/LoginList?pag=1&pageSize=${pageSize}" title="처음"><i class="fa-solid fa-backward-fast" style="color:#2A93D5">&nbsp;</i></a>
+			<a href="${ctp}/study/database/LoginList?pag=${pag-1}&pageSize=${pageSize}" title="이전페이지"><i class="fa-solid fa-backward-step" style="color:#2A93D5">&nbsp;</i></a>
+		</c:if>
+		${pag}/${totPage}
+		<c:if test="${pag < totPage}">
+			<a href="${ctp}/study/database/LoginList?pag=${pag+1}&pageSize=${pageSize}" title="다음페이지"><i class="fa-solid fa-forward-step" style="color:#2A93D5">&nbsp;</i></a>
+			<a href="${ctp}/study/database/LoginList?pag=${totPage}&pageSize=${pageSize}" title="끝"><i class="fa-solid fa-forward-fast" style="color:#2A93D5"></i></a>
+		</c:if>
+	</div>
 	<input type="button" value="전체조회" onclick="loginList()" class="btn btn-primary btn-sm mb-2 float-left" />
-	<span style="width:100px" class="float-right">
-		<select id="orderOption" onchange="orderList()" class="custom-select custom-select-sm">
-	    <option selected>정렬</option>
-	    <option value="name">이름순</option>
-	    <option value="age">나이순</option>
-	    <option value="idx">가입일순</option>
+	<span style="width:150px" class="float-right">
+		<select name="orderOption" id="orderOption" onchange="orderList()" class="custom-select custom-select-sm">
+	    <%-- <option <c:if test="${orderOption == ''}">selected</c:if>>정렬</option> --%>
+	    <option value="name" <c:if test="${orderOption == 'name'}">selected</c:if> >이름 오름차순</option>
+	    <option value="name desc" <c:if test="${orderOption == 'name desc'}">selected</c:if>>이름 내림차순</option>
+	    <option value="age" <c:if test="${orderOption == 'age'}">selected</c:if>>나이 오름차순</option>
+	    <option value="age desc" <c:if test="${orderOption == 'age desc'}">selected</c:if>>나이 내림차순</option>
+	    <option value="idx" <c:if test="${orderOption == 'idx'}">selected</c:if>>번호 오름차순</option>
+	    <option value="idx desc"  <c:if test="${orderOption == 'idx desc'}">selected</c:if>>번호 내림차순</option>
   	</select>
 	</span>
 	<table class="table table-hover text-center">
