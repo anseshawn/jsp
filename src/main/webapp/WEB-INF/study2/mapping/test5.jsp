@@ -12,7 +12,7 @@
   <script>
   	'use strict';
   	
-  	function menu() {
+  	function selectMenu() {
   		let selection = document.getElementById("menu").value;
   		if(selection == "input") location.href = "t5Input.do5"
   		else if(selection == "update") location.href = "t5Update.do5"
@@ -27,15 +27,16 @@
 <jsp:include page="/include/nav.jsp" />
 <p><br/></p>
 <div class="container">
-<form name="myform">
-	<select name="menu" id="menu" onchange="menu()" class="custom-select">
-  	<option selected>선택</option>
-  	<option value="input">회원가입</option>
-    <option value="update">수정</option>
-    <option value="delete">삭제</option>
-    <option value="allList">전체리스트</option>
-  </select>
-</form>
+	<h2>회원 메뉴</h2>
+	<form name="myform">
+		<select name="menu" id="menu" onchange="selectMenu()" class="custom-select mt-3">
+	  	<option selected>선택</option>
+	  	<option value="input">회원가입</option>
+	    <option value="update">수정</option>
+	    <option value="delete">삭제</option>
+	    <option value="allList">전체리스트</option>
+	  </select>
+	</form>
 </div>
 <p><br/></p>
 <jsp:include page="/include/footer.jsp" />
