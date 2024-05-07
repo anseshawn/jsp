@@ -63,6 +63,7 @@
 			      <!-- 디렉토리 매핑, 확장자 매핑 둘 다 url패턴 -->
 			      <a class="dropdown-item" href="${ctp}/mapping/test3.do3">확장자매핑연습3</a>
 			      <a class="dropdown-item" href="${ctp}/mapping/test4.do4">확장자매핑연습4</a>
+			      <a class="dropdown-item" href="${ctp}/mapping/test5.do5">확장자매핑숙제</a>
 			    </div>
 		  	<!-- </div> -->
       </li>
