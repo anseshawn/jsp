@@ -334,5 +334,61 @@ public class LoginDAO {
 		}
 		return totRecCnt;
 	}
+
+	
+	// 아이디 검색하여 vo 객체에 담아서 반환(ajax에서 사용중..)
+	public LoginVO getLoginIdSearch(String mid) {
+		LoginVO vo = new LoginVO();
+		try {
+			sql = "select * from hoewon where mid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, mid);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vo;
+	}
+
+	
+	// AJAX3 전체자료 조회 (조건 없음)
+	public ArrayList<LoginVO> getLoginAllList() {
+		ArrayList<LoginVO> vos = new ArrayList<LoginVO>();
+		try {
+			sql = "select * from hoewon order by idx desc";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				vo = new LoginVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setAge(rs.getInt("age"));
+				vo.setGender(rs.getString("gender"));
+				vo.setAddress(rs.getString("address"));
+				
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
 	
 }

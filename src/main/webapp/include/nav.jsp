@@ -64,17 +64,24 @@
 			      <a class="dropdown-item" href="${ctp}/mapping/test3.do3">확장자매핑연습3</a>
 			      <a class="dropdown-item" href="${ctp}/mapping/test4.do4">확장자매핑연습4</a>
 			      <a class="dropdown-item" href="${ctp}/mapping/test5.do5">확장자매핑숙제</a>
+			      <a class="dropdown-item" href="${ctp}/ajaxTest1.st">AJAX연습(일반)</a>
+			      <a class="dropdown-item" href="${ctp}/ajaxTest2.st">AJAX연습(응용)</a>
+			      <a class="dropdown-item" href="${ctp}/ajaxTest3.st">AJAX연습(회원관리)</a>
 			    </div>
 		  	<!-- </div> -->
       </li>
+     </ul>
 <%		} %>
-      <li class="nav-item">
+		<ul class="navbar-nav ml-auto">
 <%		if(!mid_.equals("")) { %>      
+      <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/database/Logout">Logout</a>
+      </li>
 <%		} else { %>
+      <li class="nav-item">
         <a class="nav-link" href="<%=request.getContextPath()%>/study/database/login.jsp">Login</a>
-<%		} %>
       </li>      
+<%		} %>
     </ul>
   </div>  
 </nav>
