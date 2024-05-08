@@ -8,6 +8,38 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>join.jsp</title>
   <%@ include file = "/include/bs4.jsp" %>
+  <script>
+  	'use strict';
+  	
+  	function idCheck() {
+  		let mid = myform.mid.value;
+  		if(mid.trim() == ""){
+  			alert("아이디를 입력하세요.");
+  			myform.mid.focus();
+  			return false;
+  		}
+  		
+  		$.ajax({
+  			url: "${ctp}/study/database/Z_IdCheck",
+  			type: "post",
+  			data: {mid:mid},
+  			success: function(res){
+  				if(res != 0){
+  					alert("사용 가능한 아이디입니다.");
+  					$("#idC").prop("disabled",true);
+  				}
+  				else {
+  					alert("이미 존재하는 아이디입니다. 다른 아이디를 입력해주세요.");
+  					myform.mid.focus();
+  				}
+  			},
+  			error: function(){
+  				alert("중복 확인 오류");
+  			}
+  		});
+  	}
+  	
+  </script>
 </head>
 <body>
 <jsp:include page="/include/header.jsp" />
@@ -21,7 +53,12 @@
 	    </tr>
 	    <tr>
 	      <th>아이디</th>
-	      <td><input type="text" name="mid" placeholder="아이디를 입력하세요." autofocus required class="form-control"/></td>
+	      <td class="input-group mb-2">
+	      	<input type="text" name="mid" placeholder="아이디를 입력하세요." autofocus required class="form-control"/>
+	      	<div class="input-group-append">
+	      		<input type="button" id="idC" value="아이디 중복확인" onclick="idCheck()" class="btn btn-success"/>
+	      	</div>
+	      </td>
 	    </tr>
 	    <tr>
 	      <th>비밀번호</th>

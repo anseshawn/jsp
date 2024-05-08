@@ -24,6 +24,28 @@
   		}
   	}
   	
+  	function ajaxCheck(idx) {
+  		let pwd = myform.pwd.value;
+  		if(pwd.trim() == "") {
+  			alert("비밀번호를 입력하세요.");
+  			myform.pwd.focus();
+  			return false;
+  		}
+  		
+			$.ajax({
+				url: "${ctp}/pwdCheck.pc",
+				type: "get",
+				data: {pwd : pwd, idx : idx},
+				success: function(str) {
+					if(idx == 1)	$("#demo1").html(str);
+					else if(idx == 2)	$("#demo2").html(str);
+				},
+				error: function() {
+					alert("전송 오류");
+				}
+			});
+  	}
+  	
   </script>
 </head>
 <body>
@@ -54,14 +76,23 @@
       <tr>
         <td colspan="2">
           <input type="button" value="숫자비밀번호" onclick="fCheck(1)" class="btn btn-success mr-2"/>
-          <input type="button" value="문자비밀번호" onclick="fCheck(2)" class="btn btn-success mr-2"/>
+          <input type="button" value="문자비밀번호" onclick="fCheck(2)" class="btn btn-primary mr-2"/>
         </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="button" value="숫자비밀번호(ajax)" onclick="ajaxCheck(1)" class="btn btn-success mr-2"/>
+          <input type="button" value="문자비밀번호(ajax)" onclick="ajaxCheck(2)" class="btn btn-primary mr-2"/>
+        </td>      
       </tr>
     </table>
     <input type="hidden" name="idx" />
   </form>
   <br/>
   <div>비밀번호를 전송 후 콘솔창에서 암호화 된 비밀번호를 확인하세요.</div>
+  <hr/>
+  <div id="demo1"></div>
+  <div id="demo2"></div>
 </div>
 <p><br/></p>
 <jsp:include page="/include/footer.jsp" />
