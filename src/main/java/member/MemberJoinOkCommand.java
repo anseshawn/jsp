@@ -1,6 +1,7 @@
 package member;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class MemberJoinOkCommand implements MemberInterface {
 		
 		// DB에 저장시킬 자료 중 not null 데이터는 BackEnd 체크 시켜준다...(추후에)
 		
-		// 아이디 / 닉네임 중복체크... (추후에)
+		// 아이디 / 닉네임 중복체크...
 		MemberDAO dao = new MemberDAO();
 		MemberVO vo = dao.getMemberIdCheck(mid);
 		if(vo.getMid() != null) {
@@ -47,9 +48,18 @@ public class MemberJoinOkCommand implements MemberInterface {
 			request.setAttribute("url", "/MemberJoin.mem");
 			return;
 		}
+		vo = dao.getMemberNickCheck(nickName);
+		if(vo.getNickName() != null) {
+			request.setAttribute("message", "이미 사용중인 닉네임입니다.");
+			request.setAttribute("url", "/MemberJoin.mem");
+			return;
+		}
 		
 		
-		// 비밀번호 암호화(SHA-256) - salt키를 만든 후 암호화 시켜준다... (이것도 추후에...) (uuid코드 중 앞의 8자리와 같이 병행 처리 후 암호화)
+		// 비밀번호 암호화(SHA-256) - salt키를 만든 후 암호화 시켜준다...(uuid코드 중 앞의 8자리와 같이 병행 처리 후 암호화)
+		UUID uid = UUID.randomUUID();
+		String saltKey = uid.toString().substring(0,8);
+		
 		SecurityUtil security = new SecurityUtil();
 		pwd = security.encryptSHA256(pwd);
 		
@@ -57,7 +67,7 @@ public class MemberJoinOkCommand implements MemberInterface {
 		// 모든 체크가 끝난 자료는 vo에 담아서 DB에 저장처리한다.
 		vo = new MemberVO();
 		vo.setMid(mid);
-		vo.setPwd(pwd); // vo.setPwd(salt+pwd); // 솔트키를 앞에 놓고 저장 후 나중에 앞의 여덟자리만 잘라서 비교
+		vo.setPwd(saltKey+pwd); // vo.setPwd(salt+pwd); // 솔트키를 앞에 놓고 저장 후 나중에 앞의 여덟자리만 잘라서 비교
 		vo.setNickName(nickName);
 		vo.setName(name);
 		vo.setGender(gender);

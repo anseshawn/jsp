@@ -14,19 +14,80 @@
     'use strict';
     
     let idCheckSw = 0;
-    let nickCheckSw = 1;
-    // 중복체크 버튼을 누르면 스위치를 1로 변경, 둘 다 1로 되어있으면 submit 가능하도록...
+    let nickCheckSw = 0;
     
     function fCheck() {
-    	// 유효성 검사..... (정규식)
-    	// 아이디,닉네임,성명,이메일,홈페이지,전화번호,비밀번호 등등....
+    	// 필수항목 입력여부 확인 
+    	let mid = document.getElementById("mid").value.trim();
+    	let pwd = document.getElementById("pwd").value.trim();
+    	let nickName = document.getElementById("nickName").value.trim();
+    	let name = document.getElementById("name").value.trim();
+    	let gender = myform.gender.value;
+    	//let birthday = myform.birthday.value;
+    	let homePage = document.getElementById("homePage").value.trim();
+    	//let job = myform.job.value;
+    	let email1 = myform.email1.value.trim();
+    	
+    	
+    	if(mid == "") {
+    		alert("아이디를 입력하세요");
+    		myform.mid.focus();
+    		return false;
+    	}
+    	else if(pwd == "") {
+    		alert("비밀번호를 입력하세요");
+    		myform.pwd.focus();
+    		return false;
+    	}
+    	else if(nickName == "") {
+    		alert("닉네임을 입력하세요");
+    		myform.nickName.focus();
+    		return false;
+    	}
+    	else if(name == "") {
+    		alert("이름을 입력하세요");
+    		myform.name.focus();
+    		return false;
+    	}
+    	else if(email1 == "") {
+    		alert("이메일을 입력하세요");
+    		myform.email1.focus();
+    		return false;
+    	}
     	
     	// 1.정규식을 이용한 유효성 검사처리
-    	
+    	// 아이디와 닉네임은 중복체크 검사시에 수행...
+    	let regPwd = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\W_]).{4,20}$/; 
+    	let regName = /^[a-zA-Z가-힣]{2,10}$/; 
+    	let regEmail = /^[a-zA-Z0-9]([-_]?[a-zA-Z0-9])*$/i;
+    	let regHomePage = /(https?:\/\/)?([a-zA-Z\d-]+)\.([a-zA-Z\d-]{2,8})([\/\w\.-]*)*\/?$/;
+    	let regTel = /\d{2,3}-\d{3,4}-\d{4}$/;
+
+    	if(!regPwd.test(pwd)) {
+    		alert("비밀번호는 영문 대/소문자와 숫자, 특수문자를 포함하여 4~20자까지 가능합니다. 특수문자를 꼭 1개 이상 포함해주세요.");
+    		document.getElementById("pwd").focus();
+    		return false;
+    	}
+    	if(!regName.test(name)) {
+    		alert("이름은 영문과 한글만 사용하여 2~10자까지 가능합니다.");
+    		document.getElementById("name").focus();
+    		return false;
+    	}
+    	if(!regEmail.test(email1)) {
+    		alert("이메일 형식에 맞도록 작성해주세요.");
+    		myform.email1.focus();
+    		return false;
+    	}    	
+    	if(homePage.length > 7){
+	    	if(!regHomePage.test(homePage)) {
+	    		alert("홈페이지 주소 형식에 맞도록 작성해주세요.");
+	    		document.getElementById("homePage").focus();
+	    		return false;
+	    	}
+    	}
     	
     	// 2.검사 후 필요한 내용들을 변수에 담아 회원가입 처리한다.
     	
-    	let email1 = myform.email1.value.trim();
     	let email2 = myform.email2.value;
 			let email = email1+"@"+email2;
 			
@@ -34,6 +95,13 @@
 			let tel2 = myform.tel2.value.trim();
 			let tel3 = myform.tel3.value.trim();
     	let tel = tel1+"-"+tel2+"-"+tel3;
+    	if(tel2 != "" || tel3 != ""){
+	    	if(!regTel.test(tel)) {
+	    		alert("전화번호 형식(000-0000-0000)에 맞도록 작성해주세요.");
+	    		myform.tel2.focus();
+	    		return false;
+	    	}    		
+    	}
     	
     	let postcode = myform.postcode.value + " ";
     	let roadAddress = myform.roadAddress.value + " ";
@@ -62,14 +130,18 @@
     
     // 아이디 중복체크
     function idCheck() {
+    	let regMid = /^[a-zA-Z0-9_]{4,20}$/;
     	let mid = myform.mid.value;
     	if(mid.trim() == "") {
     		alert("아이디를 입력하세요.");
     		myform.mid.focus();
     	}
+    	else if(!regMid.test(mid)){
+    		alert("아이디는 영문 대/소문자와 숫자, 밑줄을 포함하여 4~20자까지 가능합니다.");
+    		document.getElementById("mid").focus();
+    	}
     	else {
-    		idCheckSw = 1; // 위치를 if문 안으로 옮겨야하는것이 아닌지..???
-    		// 아이디 필드를 누르면 sw를 다시 0으로 바꿔서 다시 체크하게끔
+    		idCheckSw = 1;
     		$.ajax({
     			url: "${ctp}/MemberIdCheck.mem",
     			type: "get",
@@ -77,10 +149,12 @@
     			success: function(res) {
     				if(res != 0) {
     					alert("이미 사용중인 아이디 입니다. 다시 입력하세요.");
+    					idCheckSw = 0;
     					myform.mid.focus();
     				}
     				else {
     					alert("사용 가능한 아이디 입니다.");
+    					$("#midBtn").attr("disabled",true);
     				}
     			},
     			error : function() {
@@ -89,6 +163,55 @@
     		});
     	}
     }
+    
+    // 닉네임 중복체크
+    function nickCheck() {
+    	let nickName = document.getElementById("nickName").value.trim();
+    	let regNickName = /^[a-zA-Z0-9가-힣]{2,10}$/;
+    	if(nickName.trim() == "") {
+    		alert("닉네임을 입력하세요.");
+    		myform.nickName.focus();
+    	}
+    	else if(!regNickName.test(nickName)){
+    		alert("닉네임은 영문과 한글, 숫자만 사용하여 2~10자까지 가능합니다.");
+    		document.getElementById("nickName").focus();
+    	}
+    	else {
+    		nickCheckSw = 1;
+    		$.ajax({
+    			url: "${ctp}/MemberNickCheck.mem",
+    			type: "get",
+    			data: {nickName:nickName},
+    			success: function(res) {
+    				if(res != 0) {
+    					alert("이미 사용중인 닉네임 입니다. 다시 입력하세요.");
+    					nickCheckSw = 0;
+    					myform.nickName.focus();
+    				}
+    				else {
+    					alert("사용 가능한 닉네임 입니다.");
+    					$("#nickNameBtn").attr("disabled",true);
+    				}
+    			},
+    			error : function() {
+    				alert("전송 오류");
+    			}
+    		});
+    	}
+    }
+    
+    // 입력창 누르면 스위치 리셋...?
+    window.onload = function(){
+    	mid.addEventListener('click',function(){
+    		idCheckSw = 0;
+    		$("#midBtn").removeAttr("disabled");
+    	});
+    	nickName.addEventListener('click',function(){
+    		nickCheckSw = 0;
+    		$("#nickNameBtn").removeAttr("disabled");
+    	});
+    }
+    
   </script>
 </head>
 <body>
@@ -187,7 +310,7 @@
       </div>
     </div>
     <div class="form-group">
-      <label for="homepage">Homepage address:</label>
+      <label for="homePage">Homepage address:</label>
       <input type="text" class="form-control" name="homePage" value="http://" placeholder="홈페이지를 입력하세요." id="homePage"/>
     </div>
     <div class="form-group">

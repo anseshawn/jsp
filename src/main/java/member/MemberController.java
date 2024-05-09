@@ -50,6 +50,11 @@ public class MemberController extends HttpServlet {
 			command.execute(request, response);
 			return;
 		}
+		else if(com.equals("/MemberNickCheck")) {
+			command = new MemberNickCheckCommand();
+			command.execute(request, response);
+			return;
+		}
 		else if(level > 4) {
 			request.setAttribute("message", "로그인 후 사용하세요.");
 			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");

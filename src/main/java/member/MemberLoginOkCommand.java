@@ -20,7 +20,7 @@ public class MemberLoginOkCommand implements MemberInterface {
 		
 		// 아래로 회원 인증 처리
 		if(vo.getPwd() == null || !vo.getPwd().equals(pwd)) {
-			request.setAttribute("message", "아이디를 확인하세요.");
+			request.setAttribute("message", "아이디 혹은 비밀번호를 확인하세요.");
 			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");
 			return;
 		}
