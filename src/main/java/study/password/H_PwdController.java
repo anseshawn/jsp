@@ -10,17 +10,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("*.pc")
-public class PwdController extends HttpServlet {
+public class H_PwdController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PwdInterface command = null;
+		H_PwdInterface command = null;
 		String viewPage = "/study/password/passCheck.jsp";
 		
 		String com = request.getRequestURI();
 		com = com.substring(com.lastIndexOf("/")+1, com.lastIndexOf("."));
 		
 		if(com.equals("pwdCheck")) {
-			command = new PwdCheckCommand();
+			command = new H_PwdCheckCommand();
 			command.execute(request, response);
 			return;
 		}

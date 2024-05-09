@@ -9,43 +9,53 @@
   <title>passCheck.jsp</title>
   <%@ include file = "/include/bs4.jsp" %>
   <script>
-  	'use strict';
-  	
-  	function fCheck(idx) {
-  		let pwd = myform.pwd.value;
-  		if(pwd.trim() == "") {
-  			alert("비밀번호를 입력하세요");
-  			myform.pwd.focus();
-  		}
-  		else {
-				myform.idx.value = idx;
-				myform.action = "${ctp}/study/password/PassCheck";
+    'use strict';
+
+    if('${msg}' == 'OK') alert("전송완료! 콘솔창을 확인하세요.");
+    
+    function fCheck(idx) {
+    	let pwd = myform.pwd.value;
+    	if(pwd.trim() == "") {
+    		alert("비밀번호를 입력하세요");
+    		myform.pwd.focus();
+    	}
+    	else {
+  			myform.idx.value = idx;
+    		myform.action = "${ctp}/study/password/PassCheck";
   			myform.submit();
-  		}
-  	}
-  	
-  	function ajaxCheck(idx) {
-  		let pwd = myform.pwd.value;
-  		if(pwd.trim() == "") {
-  			alert("비밀번호를 입력하세요.");
-  			myform.pwd.focus();
-  			return false;
-  		}
-  		
-			$.ajax({
-				url: "${ctp}/pwdCheck.pc",
-				type: "get",
-				data: {pwd : pwd, idx : idx},
-				success: function(str) {
-					if(idx == 1)	$("#demo1").html(str);
-					else if(idx == 2)	$("#demo2").html(str);
-				},
-				error: function() {
-					alert("전송 오류");
-				}
-			});
-  	}
-  	
+    	}
+    }
+    
+    // AJAX를 활용하여 암호화된 문자 화면에 출력시켜주기
+    let strPwd = "";
+    let pwdIdx = 0;
+    function pwdCheck(flag) {
+    	let mid = myform.mid.value;
+    	let pwd = myform.pwd.value;
+    	if(pwd.trim() == "") {
+    		alert("비밀번호를 입력하세요");
+    		myform.pwd.focus();
+    		return false;
+    	}
+    	
+    	$.ajax({
+    		url  : "${ctp}/study2/ajax/PassCheckAjax",
+    		type : "get",
+    		data : {
+    			mid : mid,
+    			pwd : pwd,
+    			flag : flag
+    		},
+    		success:function(res) {
+    			pwdIdx++;
+    			strPwd += pwdIdx + " : " + res + "<br/>";
+    			demo.innerHTML = strPwd;
+    		},
+    		error : function() {
+    			alert("전송 오류!!");
+    		}
+    	});
+    }
   </script>
 </head>
 <body>
@@ -71,28 +81,31 @@
       </tr>
       <tr>
         <th>비밀번호</th>
-        <td><input type="password" name="pwd" value="1234" required class="form-control"/></td>
+        <td><input type="password" name="pwd" value="1234" maxlength="9" required class="form-control"/></td>
       </tr>
       <tr>
         <td colspan="2">
-          <input type="button" value="숫자비밀번호" onclick="fCheck(1)" class="btn btn-success mr-2"/>
-          <input type="button" value="문자비밀번호" onclick="fCheck(2)" class="btn btn-primary mr-2"/>
+          <div class="mb-3">
+	          <input type="button" value="숫자비밀번호" onclick="fCheck(1)" class="btn btn-success mr-2"/>
+	          <input type="button" value="문자비밀번호" onclick="fCheck(2)" class="btn btn-primary mr-2"/>
+	          <input type="button" value="조합비밀번호" onclick="fCheck(3)" class="btn btn-warning mr-2"/>
+          </div>
+          <div>
+	          <input type="button" value="숫자비밀번호(AJAX)" onclick="pwdCheck(1)" class="btn btn-success mr-2"/>
+	          <input type="button" value="문자비밀번호(AJAX)" onclick="pwdCheck(2)" class="btn btn-primary mr-2"/>
+	          <input type="button" value="조합비밀번호(AJAX)" onclick="pwdCheck(3)" class="btn btn-warning mr-2"/>
+          </div>
         </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <input type="button" value="숫자비밀번호(ajax)" onclick="ajaxCheck(1)" class="btn btn-success mr-2"/>
-          <input type="button" value="문자비밀번호(ajax)" onclick="ajaxCheck(2)" class="btn btn-primary mr-2"/>
-        </td>      
       </tr>
     </table>
     <input type="hidden" name="idx" />
   </form>
   <br/>
-  <div>비밀번호를 전송 후 콘솔창에서 암호화 된 비밀번호를 확인하세요.</div>
+  <div>비밀번호를 전송 후 콘솔창에서 암호화된 비밀번호를 확인하세요.</div>
   <hr/>
-  <div id="demo1"></div>
-  <div id="demo2"></div>
+  <h5>암호화 된 비밀번호</h5>
+  <div id="demo"></div>
+  <hr/>
 </div>
 <p><br/></p>
 <jsp:include page="/include/footer.jsp" />
