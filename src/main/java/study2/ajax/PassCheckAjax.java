@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.SecurityUtil;
+
 // AJAX 선생님 소스
 //비밀번호 만들기 학습창에서 출력되는 인코딩된 비밀번호를 현재 화면에 출력하게 하는 view에서 불렀다.
 @SuppressWarnings("serial")
@@ -143,6 +145,11 @@ public class PassCheckAjax extends HttpServlet {
 			}
 			System.out.println();
 			System.out.println("최종 변환된 비밀번호(원본 비번과 비교하세요) : " + result);
+		}
+		else if(flag == 4) {
+			// common 패키지
+			SecurityUtil security = new SecurityUtil();
+			sendPwd = security.encryptSHA256(pwd);
 		}
 		
 		//response.sendRedirect(request.getContextPath()+"/study/password/passCheck.jsp?msg="+"OK");

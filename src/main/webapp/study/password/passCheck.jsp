@@ -94,6 +94,7 @@
 	          <input type="button" value="숫자비밀번호(AJAX)" onclick="pwdCheck(1)" class="btn btn-success mr-2"/>
 	          <input type="button" value="문자비밀번호(AJAX)" onclick="pwdCheck(2)" class="btn btn-primary mr-2"/>
 	          <input type="button" value="조합비밀번호(AJAX)" onclick="pwdCheck(3)" class="btn btn-warning mr-2"/>
+	          <input type="button" value="SHA-256" onclick="pwdCheck(4)" class="btn btn-danger mr-2"/>
           </div>
         </td>
       </tr>
@@ -101,6 +102,16 @@
     <input type="hidden" name="idx" />
   </form>
   <br/>
+  <hr/>
+  <pre>
+  	<h4>SHA(Secure Hash Algorithm)</h4>
+  	: SHA는 단방향식(복호화가 불가능) 암호화 기법으로, 암호학적 해시함수들의 모임이다.
+  	일반적으로 복호화 할 수 없도록 만든 알고리즘으로, SHA-2라고도 한다.
+  	해시함수가 출력되는 함축된 문장을 다이제스트(Digest)라고 하는데,
+  	이때 SHA-2가 생성해주는 다이제스트의 출력길이는 256, 512Bit가 있다.
+  	여기서 256Bit의 출력길이를 갖는 SHA-2암호화 기법을 'SHA-256암호화 방식'이라고 한다.
+  </pre>
+  <hr/>
   <div>비밀번호를 전송 후 콘솔창에서 암호화된 비밀번호를 확인하세요.</div>
   <hr/>
   <h5>암호화 된 비밀번호</h5>
