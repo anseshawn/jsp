@@ -21,9 +21,8 @@
 	      <li class="nav-item">
 	        <a class="nav-link" href="#">Board</a>
 	      </li>
-	      
-	      <!-- 로그인 후 등급제로 구별할 장소 -->
-	      
+	    </c:if>
+      <c:if test="${level<=4 && (level>1 || level==0)}"> <!-- 로그인 후 게시판 권한 등급 조절 -->	      
 	      <li class="nav-item">
 	        <a class="nav-link" href="#">PDS</a>
 	      </li>    
@@ -45,11 +44,9 @@
 			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/0430_web_xml/lifeCycle/lifeCycle2.jsp">서블릿생명주기</a>
 			      <a class="dropdown-item" href="<%=request.getContextPath()%>/study/database/LoginList">데이터베이스연습</a>
 			      <a class="dropdown-item" href="#">Link 3</a>
-			      <div class="dropdown-divider"></div>
-			      <a class="dropdown-item" href="#">Another link</a>
 			    </div>
 	      </li>
-	      <li class="nav-item dropdown mr-5">
+	      <li class="nav-item dropdown">
 			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Study2</a>
 			    <div class="dropdown-menu">
 			      <a class="dropdown-item" href="${ctp}/study/password/passCheck.jsp">비밀번호암호화</a>
@@ -69,6 +66,23 @@
 			</c:if>
      </ul>
 		<ul class="navbar-nav ml-auto">
+		<c:if test="${level <= 4}">
+      <li class="nav-item dropdown">
+		    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">MyPage</a>
+		    <div class="dropdown-menu">
+		      <a class="dropdown-item" href="MemberMain.mem">회원메인화면</a>
+		      <c:if test="${level<=4 && (level > 1 || level==0)}">
+			      <a class="dropdown-item" href="#">일정관리</a>
+			      <a class="dropdown-item" href="#">메세지관리</a>
+			      <a class="dropdown-item" href="MemberList.mem">회원리스트</a>
+		      </c:if>
+		      <a class="dropdown-item" href="MemberPwdCheck.mem">내정보수정</a>
+		    <div class="dropdown-divider"></div>
+		      <a class="dropdown-item" href="MemberDelete.mem">회원탈퇴</a>
+		      <c:if test="${level == 0}"><a class="dropdown-item" href="#">관리자메뉴</a></c:if>
+		    </div>
+      </li>
+    </c:if>
 		<c:if test="${level <= 4}">    
       <li class="nav-item">
         <a class="nav-link" href="${ctp}/MemberLogout.mem">Logout</a>

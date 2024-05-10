@@ -1,12 +1,16 @@
 package member;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import common.SecurityUtil;
 
 public class MemberLoginOkCommand implements MemberInterface {
 
@@ -19,17 +23,56 @@ public class MemberLoginOkCommand implements MemberInterface {
 		MemberVO vo = dao.getMemberIdCheck(mid);
 		
 		// 아래로 회원 인증 처리
-		if(vo.getPwd() == null || !vo.getPwd().equals(pwd)) {
-			request.setAttribute("message", "아이디 혹은 비밀번호를 확인하세요.");
+		if(vo.getPwd() == null || vo.getUserDel().equals("OK")) {
+			request.setAttribute("message", "입력하신 회원 정보가 없습니다. \\n아이디 혹은 비밀번호를 확인하세요.");
 			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");
 			return;
 		}
 		
+		// 저장된 비밀번호에서 salt키를 분리시켜서 다시 암호화 시킨 후 맞는지 비교처리한다.
+		String salt = vo.getPwd().substring(0,8);
+		
+		SecurityUtil security = new SecurityUtil();
+		pwd = security.encryptSHA256(salt+pwd);
+		
+		if(!vo.getPwd().substring(8).equals(pwd)) {
+			request.setAttribute("message", "비밀번호를 확인하세요.");
+			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");
+			return;
+		}
+		
+		
 		// 로그인 체크 완료 후에 처리할 내용...(쿠키/세션/...)
 		
 		// 회원일 때 처리할 부분
-		// *** 1.방문 포인트 지급: 매번 10포인트씩 지급, 단 1일 최대 50포인트까지만 지급 -- 날짜비교?
-		// *** 2.최종접속일(로그아웃 하는 경우가 별로 없기 때문에 LoginOk에서 처리-- 로그인날짜가 최종접속일로..), 방문카운트(일일 방문카운트, 전체 누적 방문카운트)
+		// 1.방문 포인트 지급: 매번 10포인트씩 지급, 단 1일 최대 50포인트까지만 지급 -- 날짜비교?
+		// *** 2-1.최종접속일(로그아웃 하는 경우가 별로 없기 때문에 LoginOk에서 처리-- 로그인날짜가 최종접속일로..), 방문카운트(일일 방문카운트, 전체 누적 방문카운트)
+		// *** 2-2. 준회원을 자동으로 정회원 등업처리
+		// *** 3.처리 완료된 자료(vo)를 DB에 업데이트해준다.
+		
+		// 1번/2-1번 : 방문포인트 처리를 위한 날짜 추출 비교하기 - 조건에 맞도록 방문 포인트와 카운트를 증가처리한다.
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String strToday = sdf.format(today);
+		
+		if(!strToday.equals(vo.getLastDate().substring(0,10))) {
+			// strToday와 최종접속일이 다르다 : 오늘 처음 방문 (오늘 방문카운트는 1로, 기존 포인트에 +10)
+			vo.setTodayCnt(1);
+			vo.setPoint((vo.getPoint()+10));
+		}
+		else {
+			// 오늘 다시 방문한 경우(오늘 방문카운트는 기존 카운트+1, 오늘 방문횟수가 5회 이하면 기존 포인트+10을 한다.)
+			vo.setTodayCnt(vo.getTodayCnt()+1);
+			if(vo.getTodayCnt() <= 5) vo.setPoint(vo.getPoint()+10);
+		}
+		
+		// 2-2. 자동 정회원 등업시키기
+		// 조건 : 방명록에 5회 이상 글을 올렸을 시 '준회원'에서 '정회원'으로 자동 등업처리한다.(단, 방명록의 글은 1일 여러번 등록해도 1회로 처리한다.)
+		
+		
+		// 3번 : 방문 포인트와 카운트를 증가처리한 내용을 vo에 모두 담았다면 DB 자신의 레코드에 변경된 사항들을 갱신처리해준다.
+		dao.setLoginUpdate(vo);
+		
 		
 		// 쿠키에 아이디를 저장/해제 처리한다.
 		// 로그인시 아이디저장시킨다고 체크하면 쿠키에 아이디 저장하고, 그렇지 않으면 쿠키에서 아이디를 제거한다.

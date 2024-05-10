@@ -57,17 +57,18 @@ public class MemberJoinOkCommand implements MemberInterface {
 		
 		
 		// 비밀번호 암호화(SHA-256) - salt키를 만든 후 암호화 시켜준다...(uuid코드 중 앞의 8자리와 같이 병행 처리 후 암호화)
-		UUID uid = UUID.randomUUID();
-		String saltKey = uid.toString().substring(0,8);
+		UUID uuid = UUID.randomUUID();
+		String salt = uuid.toString().substring(0,8);
 		
 		SecurityUtil security = new SecurityUtil();
-		pwd = security.encryptSHA256(pwd);
+		pwd = security.encryptSHA256(salt+pwd);
 		
+		pwd = salt + pwd; // DB에 따로 salt키 필드를 만들지 않고(만들면 보안에 취약) pwd에 합쳐서 저장
 		
 		// 모든 체크가 끝난 자료는 vo에 담아서 DB에 저장처리한다.
 		vo = new MemberVO();
 		vo.setMid(mid);
-		vo.setPwd(saltKey+pwd); // vo.setPwd(salt+pwd); // 솔트키를 앞에 놓고 저장 후 나중에 앞의 여덟자리만 잘라서 비교
+		vo.setPwd(pwd); // vo.setPwd(salt+pwd); // 솔트키를 앞에 놓고 저장 후 나중에 앞의 여덟자리만 잘라서 비교
 		vo.setNickName(nickName);
 		vo.setName(name);
 		vo.setGender(gender);
