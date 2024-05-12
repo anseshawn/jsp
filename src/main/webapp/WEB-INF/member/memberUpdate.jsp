@@ -33,11 +33,6 @@
     		myform.mid.focus();
     		return false;
     	}
-    	else if(pwd == "") {
-    		alert("비밀번호를 입력하세요");
-    		myform.pwd.focus();
-    		return false;
-    	}
     	else if(nickName == "") {
     		alert("닉네임을 입력하세요");
     		myform.nickName.focus();
@@ -56,18 +51,11 @@
     	
     	// 1.정규식을 이용한 유효성 검사처리
     	// 아이디와 닉네임은 중복체크 검사시에 수행...
-    	let regPwd = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\W_]).{4,20}$/; 
     	let regName = /^[a-zA-Z가-힣]{2,10}$/; 
     	let regEmail = /^[a-zA-Z0-9]([-_]?[a-zA-Z0-9])*$/i;
     	let regHomePage = /(https?:\/\/)?([a-zA-Z\d-]+)\.([a-zA-Z\d-]{2,8})([\/\w\.-]*)*\/?$/;
     	let regTel = /\d{2,3}-\d{3,4}-\d{4}$/;
-			/* 
-    	if(!regPwd.test(pwd)) {
-    		alert("비밀번호는 영문 대/소문자와 숫자, 특수문자를 포함하여 4~20자까지 가능합니다. 특수문자를 꼭 1개 이상 포함해주세요.");
-    		document.getElementById("pwd").focus();
-    		return false;
-    	}
-    	*/
+    	
     	if(!regName.test(name)) {
     		alert("이름은 영문과 한글만 사용하여 2~10자까지 가능합니다.");
     		document.getElementById("name").focus();
@@ -132,6 +120,7 @@
     // 닉네임 중복체크
 		function nickCheck() {
     	let nickName = document.getElementById("nickName").value.trim();
+    	let mid = document.getElementById("mid").value.trim();
     	let regNickName = /^[a-zA-Z0-9가-힣]{2,10}$/;
     	if(nickName.trim() == "") {
     		alert("닉네임을 입력하세요.");
@@ -148,6 +137,12 @@
     			type: "get",
     			data: {nickName:nickName},
     			success: function(res) {
+        		if('${sNickName}' == nickName){
+        			nickCheckSw = 1;
+        			alert("사용 가능한 닉네임 입니다.");
+        			$("#nickNameBtn").attr("disabled",true);
+        			return;
+        		}
     				if(res != 0) {
     					alert("이미 사용중인 닉네임 입니다. 다시 입력하세요.");
     					nickCheckSw = 0;
@@ -180,7 +175,7 @@
 <jsp:include page="/include/nav.jsp" />
 <p><br/></p>
 <div class="container">
-  <form name="myform" method="post" action="${ctp}/MemberJoinOk.mem" class="was-validated">
+  <form name="myform" method="post" action="${ctp}/MemberUpdateOk.mem" class="was-validated">
     <h2>회 원 가 입</h2>
     <br/>
     <div class="form-group">

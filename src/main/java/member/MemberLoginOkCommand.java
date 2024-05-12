@@ -2,6 +2,7 @@ package member;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import common.SecurityUtil;
+import guest.GuestDAO;
+import guest.GuestVO;
 
 public class MemberLoginOkCommand implements MemberInterface {
 
@@ -46,7 +49,7 @@ public class MemberLoginOkCommand implements MemberInterface {
 		
 		// 회원일 때 처리할 부분
 		// 1.방문 포인트 지급: 매번 10포인트씩 지급, 단 1일 최대 50포인트까지만 지급 -- 날짜비교?
-		// *** 2-1.최종접속일(로그아웃 하는 경우가 별로 없기 때문에 LoginOk에서 처리-- 로그인날짜가 최종접속일로..), 방문카운트(일일 방문카운트, 전체 누적 방문카운트)
+		// 2-1.최종접속일(로그아웃 하는 경우가 별로 없기 때문에 LoginOk에서 처리-- 로그인날짜가 최종접속일로..), 방문카운트(일일 방문카운트, 전체 누적 방문카운트)
 		// *** 2-2. 준회원을 자동으로 정회원 등업처리
 		// *** 3.처리 완료된 자료(vo)를 DB에 업데이트해준다.
 		
@@ -68,6 +71,10 @@ public class MemberLoginOkCommand implements MemberInterface {
 		
 		// 2-2. 자동 정회원 등업시키기
 		// 조건 : 방명록에 5회 이상 글을 올렸을 시 '준회원'에서 '정회원'으로 자동 등업처리한다.(단, 방명록의 글은 1일 여러번 등록해도 1회로 처리한다.)
+		GuestDAO gDao = new GuestDAO();
+		ArrayList<GuestVO> gVos = gDao.getMemberGuestSearch(mid, vo.getName(), vo.getNickName());
+		//VisitDate
+		//GuestVO gVo = gVos.get(i);
 		
 		
 		// 3번 : 방문 포인트와 카운트를 증가처리한 내용을 vo에 모두 담았다면 DB 자신의 레코드에 변경된 사항들을 갱신처리해준다.
@@ -93,7 +100,7 @@ public class MemberLoginOkCommand implements MemberInterface {
 		if(vo.getLevel() == 0) strLevel = "관리자";
 		else if(vo.getLevel() == 1) strLevel = "준회원";
 		else if(vo.getLevel() == 2) strLevel = "정회원";
-		else if(vo.getLevel() == 3) strLevel = "우수회원";		
+		else if(vo.getLevel() == 3) strLevel = "우수회원";	
 		
 		// 필요한 정보를 session에 저장처리한다.
 		HttpSession session = request.getSession();

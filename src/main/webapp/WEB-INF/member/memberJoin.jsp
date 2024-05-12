@@ -187,7 +187,7 @@
     		$.ajax({
     			url: "${ctp}/MemberNickCheck.mem",
     			type: "get",
-    			data: {nickName:nickName},
+    			data: {nickName:nickName, mid:""},
     			success: function(res) {
     				if(res != 0) {
     					alert("이미 사용중인 닉네임 입니다. 다시 입력하세요.");
