@@ -19,7 +19,7 @@
       </li>
 			<c:if test="${level <= 4}">
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">Board</a>
+	        <a class="nav-link" href="BoardList.bo">Board</a>
 	      </li>
 	    </c:if>
       <c:if test="${level<=4 && (level>1 || level==0)}"> <!-- 로그인 후 게시판 권한 등급 조절 -->	      
@@ -79,7 +79,7 @@
 		      <a class="dropdown-item" href="MemberPwdCheck.mem">내정보수정</a>
 		    <div class="dropdown-divider"></div>
 		      <a class="dropdown-item" href="MemberDelete.mem">회원탈퇴</a>
-		      <c:if test="${level == 0}"><a class="dropdown-item" href="#">관리자메뉴</a></c:if>
+		      <c:if test="${level == 0}"><a class="dropdown-item" href="AdminMain.ad">관리자메뉴</a></c:if>
 		    </div>
       </li>
     </c:if>

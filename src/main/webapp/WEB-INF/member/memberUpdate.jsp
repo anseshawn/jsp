@@ -126,6 +126,11 @@
     		alert("닉네임을 입력하세요.");
     		myform.nickName.focus();
     	}
+    	else if(nickName == "${sNickName}") {
+    		nickCheckSw = 1;
+    		$("#nickNameBtn").attr("disabled",true);
+    		return false;
+    	}
     	else if(!regNickName.test(nickName)){
     		alert("닉네임은 영문과 한글, 숫자만 사용하여 2~10자까지 가능합니다.");
     		document.getElementById("nickName").focus();
@@ -137,12 +142,14 @@
     			type: "get",
     			data: {nickName:nickName},
     			success: function(res) {
+    				/* 
         		if('${sNickName}' == nickName){
         			nickCheckSw = 1;
         			alert("사용 가능한 닉네임 입니다.");
         			$("#nickNameBtn").attr("disabled",true);
         			return;
         		}
+        		 */
     				if(res != 0) {
     					alert("이미 사용중인 닉네임 입니다. 다시 입력하세요.");
     					nickCheckSw = 0;
@@ -317,6 +324,8 @@
     <input type="hidden" name="email" />
     <input type="hidden" name="tel" />
     <input type="hidden" name="address" />
+    <input type="hidden" name="mid" value="${sMid}" />
+    <input type="hidden" name="photo" value="${vo.photo}" />
   </form>
 </div>
 <p><br/></p>

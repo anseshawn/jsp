@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import common.SecurityUtil;
 
@@ -62,6 +63,8 @@ public class MemberUpdateOkCommand implements MemberInterface {
 		int res = dao.setMemberUpdateOk(vo);
 		
 		if(res != 0) {
+			HttpSession session = request.getSession();
+			session.setAttribute("sNickName", vo.getNickName()); // 닉네임 변경 되었을 경우를 상정해서 세션 닉네임 덮어쓰기
 			request.setAttribute("message", "회원 정보 수정이 완료되었습니다.");
 			request.setAttribute("url", "MemberMain.mem");
 		}

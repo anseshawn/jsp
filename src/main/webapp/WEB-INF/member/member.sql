@@ -35,3 +35,8 @@ desc member;
 insert into member values (default,'admin','1234','관리맨','관리자','여자',default,'010-1234-5678','28800/서울시/그린아파트/100동/101호','abc@atom.com','http://www.atom.com','학생','등산',default,'관리자입니다.',default,default,default,default,default,default,default,default);
 
 select * from member;
+
+/* 날짜 형식 비교 */
+select lastDate, timestampdiff(day, lastDate, now()) as deleteDiff from member;
+
+select count(*) from member where level=1 and timestampdiff(day,startDate,now()) <= 7;

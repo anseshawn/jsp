@@ -104,6 +104,19 @@ public class MemberController extends HttpServlet {
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
 		}
+		else if(com.equals("/MemberDelete")) {
+			viewPage += "/memberPwdDeleteCheck.jsp";
+		}
+		else if(com.equals("/MemberUpdateOk")) {
+			command = new MemberUpdateOkCommand();
+			command.execute(request, response);
+			viewPage = "/include/message.jsp";
+		}
+		else if(com.equals("/MemberDeleteCheckOk")) {
+			command = new MemberDeleteCheckOkCommand();
+			command.execute(request, response);
+			viewPage = "/include/message.jsp";
+		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
 		dispatcher.forward(request, response);

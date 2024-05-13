@@ -35,7 +35,7 @@
   <div>취미 : ${vo.hobby}</div>
   <div>자기소개 : ${vo.content}</div>
   <div>정보공개 : ${vo.userInfor}</div>
-  <div>회원 사진(파일용량:2MByte이내) : <img src="${ctp}/images/member/${vo.photo}" width="200px"/></div>
+  <div>회원 사진 : <img src="${ctp}/images/member/${vo.photo}" width="200px"/></div>
   <hr/>
   <div>
   	<a href="javascript:history.back();" class="btn btn-warning">돌아가기</a>
