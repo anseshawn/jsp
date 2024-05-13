@@ -142,6 +142,23 @@ public class AdminDAO {
 		}
 		return mCount;
 	}
+
+	// 선택 회원 일괄 등급 변경
+	public int setSelectedMemberLevelChange(int idx, int level) {
+		int res = 0;
+		try {
+			sql = "update member set level=? where idx=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, level);
+			pstmt.setInt(2, idx);
+			res = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("SQL 오류 : "+e.getMessage());
+		} finally {
+			pstmtClose();
+		}
+		return res;
+	}
 	
 	
 }

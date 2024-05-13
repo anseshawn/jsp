@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import admin.member.MemberDeleteOkCommand;
 import admin.member.MemberLevelChangeCommand;
 import admin.member.MemberListCommand;
+import admin.member.SelectedMemberLevelChangeCommand;
 
 @WebServlet("*.ad")
 public class AdminController extends HttpServlet {
@@ -50,6 +51,11 @@ public class AdminController extends HttpServlet {
 		}
 		else if(com.equals("/MemberLevelChange")) {
 			command = new MemberLevelChangeCommand();
+			command.execute(request, response);
+			return;
+		}
+		else if(com.equals("/SelectedMemberLevelChange")) {
+			command = new SelectedMemberLevelChangeCommand();
 			command.execute(request, response);
 			return;
 		}

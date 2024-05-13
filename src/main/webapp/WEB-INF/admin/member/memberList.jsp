@@ -16,11 +16,11 @@
   		$("#userDisplay").hide();
   		$("#userInfor").on("click",function(){
   			if($("#userInfor").is(':checked')){
-  				$("#tatalList").hide();
+  				$("#totalList").hide();
   				$("#userDisplay").show();
   			}
   			else {
-  				$("#tatalList").show();
+  				$("#totalList").show();
   				$("#userDisplay").hide();
   			}
   		});
@@ -84,6 +84,70 @@
   			});
   		}
   	}
+  	
+  	// 체크박스 함수
+  	function allSelect() {
+  		if(document.getElementById("aSelect").checked){
+	  		for(let i=0; i<${vos.size()}; i++) {
+	  			document.getElementsByName("selectUser")[i].checked = true;
+	  		}  			
+  		}
+  		else {
+	  		for(let i=0; i<${vos.size()}; i++) {
+	  			document.getElementsByName("selectUser")[i].checked = false;
+	  		}  
+  		}
+  	}
+  	function allReverse() {
+  		for(let i=0; i<${vos.size()}; i++) {
+  			if(document.getElementsByName("selectUser")[i].checked) {
+  				document.getElementsByName("selectUser")[i].checked = false;
+  			}
+  			else document.getElementsByName("selectUser")[i].checked = true;
+  		}
+  	}
+  	
+  	// 선택 회원 등급 변경
+  	function selectLevelChange() {
+  		if(document.getElementsByName("selectUser").length == 0) {
+  			alert("회원을 먼저 선택해주세요.");
+  			return false;
+  		}
+  		
+  		let ans = confirm("선택한 회원의 등급을 변경하시겠습니까?");
+  		if(!ans) {
+  			location.reload();
+  			return false;
+  		}
+  		
+  		let level = selectLevelForm.selectLevel.value;
+  		let items = "";
+  		for(let i=0; i<document.getElementsByName("selectUser").length; i++){
+  			if(document.getElementsByName("selectUser")[i].checked){
+  				items += document.getElementsByName("selectUser")[i].value+"/";  				
+  			}
+  		}
+  		let query = {
+  				level : level,
+  				items : items
+  		}
+  		$.ajax({
+  			url: "SelectedMemberLevelChange.ad",
+  			type: "get",
+  			data: query,
+  			success: function(res){
+  				if(res != "0") {
+  					alert("선택 회원 일괄 등급 수정이 완료되었습니다.");
+  					location.reload();
+  				}
+  				else alert("일괄 수정 실패. 다시 확인해주세요.");
+  			},
+  			error: function(){
+  				alert("전송오류");
+  			}
+  		});
+  	}
+  	
   </script>
 </head>
 <body>
@@ -109,12 +173,29 @@
 	</div>
 </div>
 <hr/>
-<div id="tatalList">
+<div id="totalList">
 	<h3 class="text-center">전체 회원 리스트</h3>
-	<table class="table table-hover text-center">
+	<table class="table table-borderless">
 		<tr>
-			<td></td>
-		</tr>
+			<td>
+				<input type="checkbox" name="aSelect" id="aSelect" onclick="allSelect()"/> 전체선택/해제 &nbsp;&nbsp;
+				<input type="checkbox" name="aReverse" id="aReverse" onclick="allReverse()"/> 선택반전
+			</td>
+			<td class="text-right">
+				<form name="selectLevelForm">
+					<select name="selectLevel" onchange="selectLevelChange()">
+						<option selected>등급선택</option>
+						<option value="1">준회원</option>
+						<option value="2">정회원</option>
+						<option value="3">우수회원</option>
+						<option value="0">관리자</option>
+						<option value="99">탈퇴신청회원</option>
+					</select>
+				</form>
+			</td>
+		</tr>	
+	</table>
+	<table class="table table-hover text-center">
 		<tr class="table-dark text-dark">
 			<th></th>
 			<th>번호</th>
@@ -133,7 +214,7 @@
 				<c:if test="${vo.userDel == 'OK'}"><c:set var="active" value="탈퇴신청"></c:set> </c:if>
 				<c:if test="${vo.userDel != 'OK'}"><c:set var="active" value="활동중"></c:set> </c:if>
 				<tr>
-					<td><input type="checkbox" name="selectUser" id="selectUser" /> </td>
+					<td><input type="checkbox" name="selectUser" id="selectUser${st}" value="${vo.idx}" /></td>
 					<td>${vo.idx}</td>
 					<td><a href="MemberSearch.mem?mid=${vo.mid}">${vo.mid}</a></td>
 					<td>${vo.nickName}</td>
