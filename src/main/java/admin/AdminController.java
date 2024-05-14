@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import admin.board.BoardContentCommand;
+import admin.board.BoardListCommand;
 import admin.member.MemberDeleteOkCommand;
 import admin.member.MemberLevelChangeCommand;
 import admin.member.MemberListCommand;
@@ -29,7 +31,7 @@ public class AdminController extends HttpServlet {
 		HttpSession session = request.getSession();
 		int level = session.getAttribute("sLevel")==null ? 999 : (int) session.getAttribute("sLevel");
 		if(level > 0) {
-			request.setAttribute("message", "관리자 메뉴입니다.");
+			request.setAttribute("message", "로그인 후 사용해 주세요.");
 			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");
 			viewPage = "/include/message.jsp";
 		}
@@ -63,6 +65,16 @@ public class AdminController extends HttpServlet {
 			command = new MemberDeleteOkCommand();
 			command.execute(request, response);
 			return;
+		}
+		else if(com.equals("/BoardList")) {
+			command = new BoardListCommand();
+			command.execute(request, response);
+			viewPage += "/board/boardList.jsp";
+		}
+		else if(com.equals("/BoardContent")) {
+			command = new BoardContentCommand();
+			command.execute(request, response);
+			viewPage += "/board/boardContent.jsp";
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);

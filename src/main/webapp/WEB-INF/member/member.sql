@@ -37,6 +37,7 @@ insert into member values (default,'admin','1234','관리맨','관리자','여�
 select * from member;
 
 /* 날짜 형식 비교 */
+/* (옵션, 날짜, 날짜) 뒤에서 앞을 뺀 값 */
 select lastDate, timestampdiff(day, lastDate, now()) as deleteDiff from member;
 
 select count(*) from member where level=1 and timestampdiff(day,startDate,now()) <= 7;

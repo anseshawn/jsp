@@ -22,6 +22,7 @@ public class BoardInputOkCommand implements BoardInterface {
 		
 		vo.setMid(mid);
 		vo.setNickName(nickName);
+		title = title.replace("<", "&lt;").replace(">", "&gt;"); // 제목에 태그 방지
 		vo.setTitle(title);
 		vo.setContent(content);
 		vo.setHostIp(hostIp);

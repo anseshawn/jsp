@@ -1,4 +1,4 @@
-package board;
+package admin.board;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,7 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class BoardListCommand implements BoardInterface {
+import admin.AdminInterface;
+import board.BoardDAO;
+import board.BoardVO;
+
+public class BoardListCommand implements AdminInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -37,6 +41,7 @@ public class BoardListCommand implements BoardInterface {
 		request.setAttribute("blockSize", blockSize);
 		request.setAttribute("curBlock", curBlock);
 		request.setAttribute("lastBlock", lastBlock);
+
 	}
 
 }
