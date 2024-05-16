@@ -30,7 +30,7 @@
 	<div>
 		<h5>회원관리</h5> <%-- 확장자 관리에 주의해야함(관리자가 보는 화면과 회원이 보는 화면은 서로 다르기 때문에 화면 설계가 따로 됨, 관리자 화면 먼저 만들고 회원 화면을 만드는 편이 낫다) --%>
 		<div><a href="MemberList.ad" target="adminContent">회원리스트</a></div>
-		<div><a href="#" target="adminContent">신고리스트</a></div>
+		<div><a href="ComplaintList.ad" target="adminContent">신고리스트</a></div>
 	</div>
 	<hr/>
 </div>

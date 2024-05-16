@@ -22,6 +22,7 @@
 	-->
 	<p>방명록 새글 : ??? (최근 1주일 안에 작성된 글의 개수)</p>
 	<p>게시판 새글 : ??? </p>
+	<p>최근 신고 건수(최근 1주일) : <a href="#"><font color="red"><b>${cCount}</b></font></a>건</p>
 	<p>신규등록회원 : <a href="MemberList.ad?level=1"><b>${mCount}</b></a>건</p>
 	<p>탈퇴신청회원 : <a href="MemberList.ad?level=99"><font color="red"><b>${m99Count}</b></font></a>건</p>
 </div>

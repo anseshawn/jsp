@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.Pagination;
-import common.Pagination2;
 
-public class BoardListCommandPage implements BoardInterface {
+public class BoardListCommand3 implements BoardInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -19,16 +18,14 @@ public class BoardListCommandPage implements BoardInterface {
 		// 페이징 처리 시작
 		int pag = request.getParameter("pag")==null ? 1 : Integer.parseInt(request.getParameter("pag"));
 		int pageSize = request.getParameter("pageSize")==null ? 10 : Integer.parseInt(request.getParameter("pageSize"));
-		int totRecCnt = dao.getTotRecCnt();
+		String part = request.getParameter("part")==null ? "전체" : request.getParameter("part");
+		int totRecCnt = dao.getTotRecCnt();		// 게시판의 전체 레코드 수 구하기
 		
-		int startIndexNo = Pagination2.pageChange(request, pag, pageSize, totRecCnt);
-		int totPage = (totRecCnt % pageSize)==0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize)+1;
-		if(pag > totPage) pag = 1;
-		// 페이징 처리 끝
-		
-		ArrayList<BoardVO> vos = dao.getBoardList(startIndexNo,pageSize);
-		
+		int startIndexNo = (pag-1) * pageSize;
+		ArrayList<BoardVO> vos = dao.getBoardList(startIndexNo,pageSize);		// 게시판의 전체 자료 가져오기
 		request.setAttribute("vos", vos);
+		
+		// Pagination.pageChange(request,pag,pageSize,totRecCnt,startIndexNo,part); // totRecCnt와 dao.getBoardList(startIndexNo)를 대변하기 위해 넘김a
 	}
 
 }

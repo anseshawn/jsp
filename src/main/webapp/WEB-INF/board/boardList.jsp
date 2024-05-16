@@ -16,6 +16,13 @@
   		let pageSize = $("#pageSize").val();
   		location.href = "BoardList.bo?pageSize="+pageSize;
   	}
+  	
+  	function modalCheck(hostIp,mid,nickName,idx){
+  		$("#myModal1 #modalHostIp").text(hostIp);  		
+  		$("#myModal1 #modalMid").text(mid);  		
+  		$("#myModal1 #modalNickName").text(nickName);  		
+  		$("#myModal1 #modalIdx").text(idx);  		
+  	}
   </script>
 </head>
 <body>
@@ -47,15 +54,22 @@
 			<th>작성일</th>
 			<th>조회수(❤)</th>
 		</tr>
+		<c:set var="curScrStartNo" value="${curScrStartNo}"/>
 		<c:forEach var="vo" items="${vos}" varStatus="st">
 			<c:if test="${vo.openSw == 'OK' || sLevel == 0 || sNickName == vo.nickName}">
 				<tr>
-					<td>${vo.idx}</td>
+					<td>${curScrStartNo}</td>
 					<td class="text-left"> <%-- 페이지 처리하게 되면 페이지 사이즈, 서치 등등 ... 함께 넘겨야함 --%>
 						<a href="BoardContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}">${vo.title}</a>
 						<c:if test="${vo.hour_diff <= 24}"><img src="${ctp}/images/new.gif"/></c:if> 
 					</td>
-					<td>${vo.nickName}</td>
+					<td>
+						${vo.nickName}
+						<c:if test="${sLevel == 0}">
+							<!-- 숫자 넘길 땐 따옴표 없어도 되지만 모달에 넘길 때 타입이 일정하지 않으면 에러 발생 가능성이 있기 때문에 그냥 문자 형태로.. -->
+							<a href="#" onclick="modalCheck('${vo.hostIp}','${vo.mid}','${vo.nickName}','${vo.idx}')" data-toggle="modal" data-target="#myModal1" class="btn btn-primary btn-sm">모달출력</a>
+						</c:if>
+					</td>
 					<td>
 					<!-- 1일(24시간)이내는 시간만 표시, 이후는 날짜와 시간을 표시 : 2024-05-14 10:43:52 -->
 						${vo.date_diff == 0 ? fn:substring(vo.wDate,11,19) : fn:substring(vo.wDate,0,10) }
@@ -63,6 +77,7 @@
 					<td>${vo.readNum}(❤${vo.good})</td>
 				</tr>
 			</c:if>
+			<c:set var="curScrStartNo" value="${curScrStartNo - 1}"/>
 		</c:forEach>
 		<tr><td colspan="5" class="m-0 p-0"></td></tr>
 	</table>
@@ -83,6 +98,41 @@
 	<!-- 블록페이지 끝 -->
 </div>
 <p><br/></p>
+
+<!-- 글쓴이 정보 모달에 출력하기 -->
+<div class="modal fade" id="myModal1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">회원 정보</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+      	<form name="midModalForm">
+      		<!-- 
+      		아이디 : 
+      		<input type="text" name="mid" id="mid" placeholder="아이디를 입력하세요" class="form-control mb-2" required />
+      		<input type="button" value="이름확인" onclick="nameCheck()" class="btn btn-success form-control" />
+      		 -->
+      		 게시글 고유번호 : <span id="modalIdx"></span><br/>
+      		 IP : <span id="modalHostIp"></span><br/>
+      		 아이디 : <span id="modalMid"></span><br/>
+      		 닉네임 : <span id="modalNickName"></span><br/>
+      	</form>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
 <jsp:include page="/include/footer.jsp" />
 </body>
 </html>

@@ -11,6 +11,7 @@ create table board (
 	openSw char(2) default 'OK',					/* 게시글 공개여부(OK: 공개, NO: 비공개) */
 	wDate datetime default now(),					/* 작성 날짜 */
 	good int default 0,										/* 좋아요 수(누적) */
+	complaint char(2) default 'NO',				/* 신고 여부(신고당한 글: OK, 정상글: NO) */
 	primary key(idx),											/* 기본키 : 고유번호 */
 	foreign key(mid) references member(mid)
 );
