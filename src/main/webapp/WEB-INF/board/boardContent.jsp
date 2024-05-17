@@ -135,6 +135,60 @@
   			}
   		});
   	}
+  	
+  	// 댓글 달기
+  	function replyCheck() {
+  		let content = $("#content").val();
+  		if(content.trim() == "") {
+  			alert("댓글을 입력하세요");
+  			return false;
+  		}
+  		let query = {
+  				boardIdx : ${vo.idx},
+  				mid : '${sMid}',
+  				nickName : '${sNickName}',
+  				hostIp : '${pageContext.request.remoteAddr}',
+  				content : content
+  		}
+  		
+  		$.ajax({
+  			url : "BoardReplyInput.bo",
+  			type : "post",
+  			data : query,
+  			success : function(res){
+  				if(res != "0") {
+  					alert("댓글이 입력되었습니다.");
+  					location.reload(); // 댓글창 부분 리로드...?
+  				}
+  				else alert("댓글 입력 실패");
+  			},
+  			error : function () {
+  				alert("전송오류");
+  			}
+  		});
+  	}
+  	
+  	// 댓글 삭제
+  	function replyDelete(idx) {
+  		let ans = confirm("현재 댓글을 삭제하시겠습니까?");
+  		if(!ans) return false;
+  		
+  		$.ajax({
+  			url : "BoardReplyDelete.bo",
+  			type : "post",
+  			data : {idx : idx},
+  			success : function(res){
+  				if(res != "0") {
+  					alert("댓글이 삭제되었습니다.");
+  					location.reload();
+  				}
+  				else alert("삭제 실패");
+  			},
+  			error: function(){
+  				alert("전송오류");
+  			}
+  		});
+  	}
   </script>
 </head>
 <body>
@@ -173,7 +227,8 @@
 			<td colspan="4">
 				<div class="row">
 	      	<div class="col">
-						<input type="button" value="돌아가기" onclick="location.href='BoardList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
+						<c:if test="${empty flag}"><input type="button" value="돌아가기" onclick="location.href='BoardList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/></c:if>
+						<c:if test="${!empty flag}"><input type="button" value="돌아가기" onclick="location.href='BoardSearchList.bo?pag=${pag}&pageSize=${pageSize}&search=${search}&searchString=${searchString}';" class="btn btn-secondary"/></c:if>
 					</div>
 					<c:if test="${sNickName == vo.nickName || sLevel == 0}">
 						<div class="col text-right">
@@ -187,6 +242,12 @@
 							<c:if test="${report != 'OK'}"><input type="button" value="신고하기" class="btn btn-danger btn-sm ml-auto" data-toggle="modal" data-target="#myModal"/></c:if>
 						</div>
 					</c:if>
+<%-- 					<c:if test="${sNickName != vo.nickName}">
+		        <div class="col text-right">
+		          <c:if test="${report == 'OK'}"><font color='red'><b>현재 이글은 신고중입니다.</b></font></c:if>
+			        <c:if test="${report != 'OK'}"><input type="button" value="신고하기" data-toggle="modal" data-target="#myModal" class="btn btn-danger text-right" /></c:if>
+		        </div>
+	        </c:if> --%>
 				</div>
 			</td>
 		</tr>
@@ -205,8 +266,54 @@
 			</td>
 		</tr>
 	</table>
+	<!-- 이전글 / 다음글 출력 끝 -->
 </div>
 <p><br/></p>
+
+<!-- 댓글 처리(리스트/입력) 시작 -->
+<div class="container">
+	<h4>댓 글</h4>
+	<!-- 댓글 리스트 보여주기 -->
+	<table class="table table-borderless table-hover text-center">
+		<tr>
+			<th>작성자</th>
+			<th>내용</th>
+			<th>작성일자</th>
+			<th>접속IP</th>
+		</tr>
+		<c:forEach var="replyVo" items="${replyVos}" varStatus="st">
+			<tr>
+				<td>${replyVo.nickName}
+					<c:if test="${sMid == replyVo.mid || sLevel == 0}">
+						<a href="javascript:replyDelete(${replyVo.idx})" title="댓글삭제"> x</a>
+					</c:if>
+				</td>
+				<td class="text-left">${fn:replace(replyVo.content,newLine,"<br/>")}</td>
+				<td>${fn:substring(replyVo.wDate,0,10)}</td>
+				<td>${replyVo.hostIp}</td>
+			</tr>
+		</c:forEach>
+		<tr><td colspan="4" class="m-0 p-0"></td></tr>
+	</table>
+	<!-- 댓글 입력창 -->
+	<form name="replyForm">
+		<table class="table table-center">
+			<tr>
+				<td style="width:85%" class="text-left">
+					댓글 입력 : 
+					<textarea rows="4" name="content" id="content" class="form-control"></textarea>
+				</td>
+				<td style="width:15%">
+					<br/>
+					<p>작성자 : ${sNickName}</p>
+					<p><input type="button" value="등록" onclick="replyCheck()" class="btn btn-info btn-sm"/></p>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<br/>
+</div>
+<!-- 댓글 처리 끝 -->
 
 <!-- 신고하기 폼 modal -->
 <div class="modal fade" id="myModal">

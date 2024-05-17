@@ -17,10 +17,12 @@ public class BoardListCommand implements AdminInterface {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		BoardDAO dao = new BoardDAO();
 		
+		String contentsShow = "adminOK";
+		
 		// 페이징 처리 시작
 		int pag = request.getParameter("pag")==null ? 1 : Integer.parseInt(request.getParameter("pag"));
 		int pageSize = request.getParameter("pageSize")==null ? 10 : Integer.parseInt(request.getParameter("pageSize"));
-		int totRecCnt = dao.getTotRecCnt();
+		int totRecCnt = dao.getTotRecCnt(contentsShow,"","");
 		int totPage = (totRecCnt % pageSize)==0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize)+1;
 		if(pag > totPage) pag = 1;
 		int startIndexNo = (pag-1) * pageSize;
@@ -30,7 +32,7 @@ public class BoardListCommand implements AdminInterface {
 		int lastBlock = (totPage - 1) / blockSize;
 		// 페이징 처리 끝
 		
-		ArrayList<BoardVO> vos = dao.getBoardList(startIndexNo,pageSize);
+		ArrayList<BoardVO> vos = dao.getBoardList(startIndexNo,pageSize,contentsShow,"","");
 		
 		request.setAttribute("vos", vos);
 		// 설정(지정)된 페이지의 모든 자료(변수)들을 viewPage로 넘겨줄 준비를 한다. 

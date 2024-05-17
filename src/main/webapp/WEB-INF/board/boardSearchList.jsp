@@ -14,7 +14,7 @@
   	
   	function pageSizeCheck(){
   		let pageSize = $("#pageSize").val();
-  		location.href = "BoardList.bo?pageSize="+pageSize;
+  		location.href = "BoardSearchList.bo?search=${search}&searchString=${searchString}&pageSize="+pageSize;
   	}
   	
   	function modalCheck(hostIp,mid,nickName,idx){
@@ -32,7 +32,11 @@
 <div class="container">
 	<table class="table table-borderless m-0 p-0">
 		<tr>
-			<td colspan="2"><h2 class="text-center">게 시 판 리 스 트</h2></td>
+			<td colspan="2">
+				<!-- 게시판 조건별 검색 리스트 -->
+				<h2 class="text-center">검 색 결 과</h2>
+				 (<font color="blue">${searchTitle}</font>(으)로 <font color="blue">${searchString}</font>(을)를 검색한 결과 <font color="red"><b>${searchCount}</b></font>건의 자료가 검색되었습니다.)
+			</td>
 		</tr>
 		<tr>
 			<td><c:if test="${sLevel != 1}"><a href="BoardInput.bo" class="btn btn-primary btn-sm">글쓰기</a></c:if></td>
@@ -60,8 +64,7 @@
 				<tr>
 					<td>${curScrStartNo}</td>
 					<td class="text-left"> <%-- 페이지 처리하게 되면 페이지 사이즈, 서치 등등 ... 함께 넘겨야함 --%>
-						<a href="BoardContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}">${vo.title}</a>
-						<c:if test="${vo.replyCnt != 0}">&nbsp;(${vo.replyCnt})</c:if>
+						<a href="BoardContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}&flag=search&search=${search}&searchString=${searchString}">${vo.title}</a>
 						<c:if test="${vo.hour_diff <= 24}"><img src="${ctp}/images/new.gif"/></c:if> 
 					</td>
 					<td>
@@ -86,21 +89,22 @@
 	<!-- 블록페이지 시작 -->	
 	<div class="text-center">
 		<ul class="pagination justify-content-center" style="margin:20px 0">
-			<c:if test="${pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/BoardList.bo?pag=1&pageSize=${pageSize}">처음</a></li></c:if>
-			<c:if test="${curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/BoardList.bo?pag=${(curBlock-1)*blockSize+1}&pageSize=${pageSize}">이전블록</a></li></c:if>
+			<c:if test="${pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=1&pageSize=${pageSize}">처음</a></li></c:if>
+			<c:if test="${curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=${(curBlock-1)*blockSize+1}&pageSize=${pageSize}">이전</a></li></c:if>
 			<c:forEach var="i" begin="${(curBlock*blockSize+1)}" end="${(curBlock)*blockSize+blockSize}" varStatus="st">
-				<c:if test="${i <= totPage && i == pag}"><li class="page-item active"><a class="page-link" href="${ctp}/BoardList.bo?pag=${i}&pageSize=${pageSize}">${i}</a></li></c:if>
-				<c:if test="${i <= totPage && i != pag}"><li class="page-item"><a class="page-link" href="${ctp}/BoardList.bo?pag=${i}&pageSize=${pageSize}">${i}</a></li></c:if>
+				<c:if test="${i <= totPage && i == pag}"><li class="page-item active"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageSize}">${i}</a></li></c:if>
+				<c:if test="${i <= totPage && i != pag}"><li class="page-item"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=${i}&pageSize=${pageSize}">${i}</a></li></c:if>
 			</c:forEach>
-			<c:if test="${curBlock < lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/BoardList.bo?pag=${(curBlock+1)*blockSize+1}&pageSize=${pageSize}">다음블록</a></li></c:if>
-			<c:if test="${pag < totPage}"><li class="page-item"><a class="page-link" href="${ctp}/BoardList.bo?pag=${totPage}&pageSize=${pageSize}">끝</a></li></c:if>
+			<c:if test="${curBlock < lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=${(curBlock+1)*blockSize+1}&pageSize=${pageSize}">다음</a></li></c:if>
+			<c:if test="${pag < totPage}"><li class="page-item"><a class="page-link" href="${ctp}/BoardSearchList.bo?search=${search}&searchString=${searchString}&pag=${totPage}&pageSize=${pageSize}">끝</a></li></c:if>
 		</ul>
 	</div>
 	<!-- 블록페이지 끝 -->
 	<br/>
 	<!-- 검색기 시작 -->
+	<!-- 
 	<div class="container text-center">
-		<form name="searchForm" method="post" action="BoardSearchList.bo">
+		<form name="searchForm" method="post" action="BoardSearch.bo">
 			<b>검색 : </b>
 			<select name="search" id="search">
 				<option value="title">제목</option>
@@ -111,7 +115,9 @@
 			<input type="submit" value="검색" class="btn btn-secondary btn-sm"/>
 		</form>
 	</div>
+	 -->
 	<!-- 검색기 끝 -->
+	<input type="button" value="돌아가기" onclick="location.href='BoardList.bo';" class="btn btn-warning form-control" />
 </div>
 <p><br/></p>
 

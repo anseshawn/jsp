@@ -19,4 +19,6 @@ select * from complaint;
 
 select c.*,b.title,b.nickName,b.mid from complaint c, board b where c.partIdx = b.idx;
 
+select c.*, b.title as title, b.nickName as nickName, b.mid as mid from complaint c, board b where c.partIdx = b.idx;
+
 select c.*, date_format(c.cpDate,'%Y-%m-%d %H:%i') as cpDate, b.title,b.nickName,b.mid from complaint c, board b where c.partIdx = b.idx;
