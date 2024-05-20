@@ -62,13 +62,13 @@
     	let regEmail = /^[a-zA-Z0-9]([-_]?[a-zA-Z0-9])*$/i;
     	let regHomePage = /(https?:\/\/)?([a-zA-Z\d-]+)\.([a-zA-Z\d-]{2,8})([\/\w\.-]*)*\/?$/;
     	let regTel = /\d{2,3}-\d{3,4}-\d{4}$/;
-/* 
+			/* 
     	if(!regPwd.test(pwd)) {
     		alert("비밀번호는 영문 대/소문자와 숫자, 특수문자를 포함하여 4~20자까지 가능합니다. 특수문자를 꼭 1개 이상 포함해주세요.");
     		document.getElementById("pwd").focus();
     		return false;
     	}
-    	 */
+    	*/
     	if(!regName.test(name)) {
     		alert("이름은 영문과 한글만 사용하여 2~10자까지 가능합니다.");
     		document.getElementById("name").focus();
@@ -118,16 +118,20 @@
     	
     	// 이미지 등록 시키기
     	let fName = document.getElementById("file").value;
-    	let MaxSize = 1024 * 1024 * 2;
-    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
-    	let fileSize = document.getElementById("file").files[0].size;
-    	if(fileSize > maxSize) {
-    		alert("회원 사진의 최대 용량은 2MByte 입니다.");
+    	let maxSize = 1024 * 1024 * 2;
+    	if(fName != null && fName != "") {
+	    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+	    	let fileSize = document.getElementById("file").files[0].size;
+    		
+	    	if(fileSize > maxSize) {
+	    		alert("회원 사진의 최대 용량은 2MByte 입니다.");
+	    	}
+	    	else if(ext != 'jpg' && ext != 'png' && ext != 'gif' && ext != 'jpeg') {
+	    		alert("사진 파일(jpg/png/gif/jpeg)만 등록 가능합니다.");
+	    	}
     	}
-    	else if(ext != 'jpg' && ext != 'png' && ext != 'gif' && ext != 'jpeg') {
-    		alert("사진 파일(jpg/png/gif/jpeg)만 등록 가능합니다.");
-    	}
-    	    	
+    	
+    	// 회원 가입 전 체크
     	if(idCheckSw == 0){
     		alert("아이디 중복 체크를 수행해주세요.");
     		document.getElementById("midBtn").focus();
@@ -246,7 +250,7 @@
 <jsp:include page="/include/nav.jsp" />
 <p><br/></p>
 <div class="container">
-  <form name="myform" method="post" action="${ctp}/MemberJoinOk.mem" class="was-validated">
+  <form name="myform" method="post" action="${ctp}/MemberJoinOk.mem" class="was-validated" enctype="multipart/form-data">
     <h2>회 원 가 입</h2>
     <br/>
     <div class="form-group">
