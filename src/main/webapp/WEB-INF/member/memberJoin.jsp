@@ -116,7 +116,18 @@
     	let address = postcode+"/"+roadAddress+"/"+detailAddress+"/"+extraAddress;
     	
     	
-    	
+    	// 이미지 등록 시키기
+    	let fName = document.getElementById("file").value;
+    	let MaxSize = 1024 * 1024 * 2;
+    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+    	let fileSize = document.getElementById("file").files[0].size;
+    	if(fileSize > maxSize) {
+    		alert("회원 사진의 최대 용량은 2MByte 입니다.");
+    	}
+    	else if(ext != 'jpg' && ext != 'png' && ext != 'gif' && ext != 'jpeg') {
+    		alert("사진 파일(jpg/png/gif/jpeg)만 등록 가능합니다.");
+    	}
+    	    	
     	if(idCheckSw == 0){
     		alert("아이디 중복 체크를 수행해주세요.");
     		document.getElementById("midBtn").focus();
@@ -218,6 +229,16 @@
     	});
     }
     
+    // 회원 사진 선택 시 이미지 미리보기
+    function imgCheck(e) {
+    	if(e.files && e.files[0]) {
+    		let reader = new FileReader();
+    		reader.onload = function(e) {
+    			document.getElementById("demoImg").src = e.target.result;
+    		}
+    		reader.readAsDataURL(e.files[0]);
+    	}
+    }
   </script>
 </head>
 <body>
@@ -396,8 +417,10 @@
     </div>
     <div  class="form-group">
       회원 사진(파일용량:2MByte이내) :
-      <input type="file" name="fName" id="file" class="form-control-file border"/>
+      <input type="file" name="fName" id="file" onchange="imgCheck(this)" class="form-control-file border"/>
     </div>
+    <div><img id="demoImg" width="200px"/></div>
+    <hr/>
     <button type="button" class="btn btn-secondary" onclick="fCheck()">회원가입</button> &nbsp;
     <button type="reset" class="btn btn-secondary">다시작성</button> &nbsp;
     <button type="button" class="btn btn-secondary" onclick="location.href='${ctp}/MemberLogin.mem';">돌아가기</button>
