@@ -12,8 +12,11 @@
   	'use strict';
   	
   	function fCheck() {
+  		//let fName = document.getElementById("file").value;
+  		//let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase(); // 확장자 부분만 뽑아서 소문자로
   		let fName = document.getElementById("file").value;
-  		let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase(); // 확장자 부분만 뽑아서 소문자로
+  		let ext = "";
+  		let fileSize = 0;
   		let maxSize = 1024 * 1024 * 10; // 기본 단위 : Byte, 1024 * 1024: Mb, 1024*1024*10 = 10MByte 허용
   		
   		if(fName.trim() == "") {
@@ -21,12 +24,19 @@
   			return false;
   		}
   		
-  		let fileSize = document.getElementById("file").files[0].size;
-  		if(fileSize > maxSize) {
-  			alert("업로드할 파일의 최대용량은 10MByte입니다.");
+  		let fileLength = document.getElementById("file").files.length; // 선택한 파일들의 개수
+  		
+  		for(let i=0; i<fileLength; i++) {
+  			fName = document.getElementById("file").files[i].name; // 선택된 1개의 파일 이름 가져오기
+  			ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+	  		fileSize = document.getElementById("file").files[i].size;
+	  		if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'zip' && ext != 'hwp' && ext != 'ppt' && ext != 'pptx' && ext != 'doc' && ext != 'pdf' && ext != 'xlsx' && ext != 'txt') {
+	  			alert("업로드 가능한 파일은 'jpg/gif/png/zip/hwp/ppt/pptx/doc/pdf/xlsx/txt' 입니다.");
+	  		}
   		}
-  		else if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'zip' && ext != 'hwp' && ext != 'ppt' && ext != 'pptx' && ext != 'doc' && ext != 'pdf' && ext != 'xlsx' && ext != 'txt') {
-  			alert("업로드 가능한 파일은 'jpg/gif/png/zip/hwp/ppt/pptx/doc/pdf/xlsx/txt' 입니다.");
+  		
+  		if(fileSize > maxSize) {
+  			alert("업로드 파일의 최대용량은 10MByte입니다.");
   		}
   		else {
   			//alert("파일전송!!");
