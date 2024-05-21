@@ -24,7 +24,7 @@
 	    </c:if>
       <c:if test="${level<=4 && (level>1 || level==0)}"> <!-- 로그인 후 게시판 권한 등급 조절 -->	      
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">PDS</a>
+	        <a class="nav-link" href="PdsList.pds">PDS</a>
 	      </li>    
 	      <li class="nav-item dropdown">
 			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Study1</a>
@@ -63,10 +63,7 @@
 			      <a class="dropdown-item" href="${ctp}/study/database/login.jsp">로그인연습</a>
 			      <a class="dropdown-item" href="Modal1.st">모달연습1</a>
 			      <a class="dropdown-item" href="Modal2.st">모달연습2</a>
-			      <a class="dropdown-item" href="FileUpload1.st">싱글파일업로드</a>
-			      <a class="dropdown-item" href="FileUpload2.st">멀티파일업로드2</a>
-			      <a class="dropdown-item" href="FileUpload3.st">멀티파일업로드3</a>
-			      <a class="dropdown-item" href="FileUpload4.st">멀티파일업로드4</a>
+			      <a class="dropdown-item" href="FileUpload.st">파일업로드</a>
 			    </div>
 	      </li>
 			</c:if>

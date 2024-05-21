@@ -16,15 +16,15 @@ public class MemberJoinOkCommand implements MemberInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String realPath = request.getServletContext().getRealPath("/images/member/");
+		String realPath = request.getServletContext().getRealPath("/images/member"); // 파일명이 아니고 경로, 마지막에 '/' 안 줘도 됨 
 		int maxSize = 1024 * 1024 * 2;
 		String encoding = "UTF-8";
 		
-		MultipartRequest multipartRequest = new MultipartRequest(request, realPath, maxSize,encoding, new DefaultFileRenamePolicy());
+		MultipartRequest multipartRequest = new MultipartRequest(request, realPath, maxSize, encoding, new DefaultFileRenamePolicy());
 		
 		String mid = multipartRequest.getParameter("mid")==null ? "" : multipartRequest.getParameter("mid");
-		String pwd = multipartRequest.getParameter("pwd")==null ? "" : multipartRequest.getParameter("mid");
-		String nickName = multipartRequest.getParameter("nickName")==null ? "" : multipartRequest.getParameter("mid");
+		String pwd = multipartRequest.getParameter("pwd")==null ? "" : multipartRequest.getParameter("pwd");
+		String nickName = multipartRequest.getParameter("nickName")==null ? "" : multipartRequest.getParameter("nickName");
 		String name = multipartRequest.getParameter("name")==null ? "" : multipartRequest.getParameter("name");
 		String gender = multipartRequest.getParameter("gender")==null ? "" : multipartRequest.getParameter("gender");
 		String birthday = multipartRequest.getParameter("birthday")==null ? "" : multipartRequest.getParameter("birthday");

@@ -17,9 +17,9 @@ public class FileDownLoadCommand implements StudyInterface {
 		
 		String[] files = new File(realPath).list();
 		
-		for(String file : files) {
-			System.out.println("file : "+file);
-		}
+//		for(String file : files) {
+//			System.out.println("file : "+file);
+//		}
 		
 		request.setAttribute("files", files);
 	}

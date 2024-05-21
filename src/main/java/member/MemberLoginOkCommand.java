@@ -34,10 +34,10 @@ public class MemberLoginOkCommand implements MemberInterface {
 		
 		// 저장된 비밀번호에서 salt키를 분리시켜서 다시 암호화 시킨 후 맞는지 비교처리한다.
 		String salt = vo.getPwd().substring(0,8);
-		System.out.println(pwd);
+		//System.out.println(pwd);
 		SecurityUtil security = new SecurityUtil();
 		pwd = security.encryptSHA256(salt+pwd);
-		System.out.println("salt : "+pwd);
+		//System.out.println("salt : "+pwd);
 		if(!vo.getPwd().substring(8).equals(pwd)) {
 			request.setAttribute("message", "비밀번호를 확인하세요.");
 			request.setAttribute("url", request.getContextPath()+"/MemberLogin.mem");

@@ -29,6 +29,64 @@
   			}
   		});
   	}
+  	
+    // 전체선택
+    function allCheck() {
+      for(let i=0; i<myform.fileFlag.length; i++) {
+        myform.fileFlag[i].checked = true;
+      }
+    }
+
+    // 전체취소
+    function allReset() {
+      for(let i=0; i<myform.fileFlag.length; i++) {
+        myform.fileFlag[i].checked = false;
+      }
+    }
+
+    // 선택반전
+    function reverseCheck() {
+      for(let i=0; i<myform.fileFlag.length; i++) {
+        myform.fileFlag[i].checked = !myform.fileFlag[i].checked;
+      }
+    }
+    
+    // 선택항목 삭제처리
+    function selectFileDelete() {
+    	let selectFileArray = '';
+    	// 체크박스 이름이 똑같으면 배열로 넘어옴으로 배열 길이만큼 for문 반복
+      for(let i=0; i<myform.fileFlag.length; i++) {
+        if(myform.fileFlag[i].checked) selectFileArray += myform.fileFlag[i].value + "/";
+      }
+    	if(selectFileArray == '') {
+    		alert("삭제할 항목을 1개 이상 선택하세요");
+    		return false;
+    	}
+    	
+    	let ans = confirm("선택된 파일을 삭제하시겠습니까?");
+    	if(!ans) return false;
+    	
+    	selectFileArray = selectFileArray.substring(0,selectFileArray.lastIndexOf("/"));
+      let query = {
+    		  selectFileArray : selectFileArray
+      }
+      
+      $.ajax({
+    	  url  : "FileDeleteCheck.st",
+    	  type : "post",
+    	  data : query,
+    	  success:function(res) {
+    		  if(res != "0") { 
+    			  alert("선택한 항목들을 삭제했습니다.");
+    			  location.reload();
+    		  }
+    		  else alert("삭제 실패~");
+    	  },
+    	  error : function() {
+    		  alert("전송 실패~~");
+    	  }
+      });
+    }
   </script>
 </head>
 <body>
@@ -38,9 +96,24 @@
 <div class="container">
 	<h2>저장된 파일 정보</h2>
 	<hr/>
+	<div class="row">
+	  <div class="col input-group">
+	    <input type="button" value="전체선택" onclick="allCheck()" class="btn btn-success btn-sm mr-1"/>
+	    <input type="button" value="전체취소" onclick="allReset()" class="btn btn-primary btn-sm mr-1"/>
+	    <input type="button" value="선택반전" onclick="reverseCheck()" class="btn btn-info btn-sm mr-1"/>
+	    <input type="button" value="선택항목삭제" onclick="selectFileDelete()" class="btn btn-danger btn-sm" />
+	  </div>
+	  <div class="col text-right">
+	  	<a href="FileUpload.st" class="btn btn-warning">돌아가기</a>
+	  </div>
+  </div>
+  <hr/>
+  <form name="myform">
 		<c:forEach var="file" items="${files}" varStatus="st">
+			<input type="checkbox" name="fileFlag" id="fileFlag${st.index}" value="${file}"/>
 			${st.count}. <a href="${ctp}/images/pdstest/${file}" download="${file}">${file}</a> <!-- download 속성: 브라우저에서 지원, 프론트에서 파일 다운로드 가능하게 함 -->
 			<input type="button" value="삭제" onclick="fileDelete('${file}')" class="btn btn-sm btn-danger" />
+			<input type="button" value="자바다운로드" onclick="location.href='JavaFileDownload.st?file=${file}';" class="btn btn-sm btn-primary" />
 			<br/>
 			<c:set var="fNameArr" value="${fn:split(file,'.')}"/>
 			<c:set var="extName" value="${fn:toLowerCase(fNameArr[fn:length(fNameArr)-1])}" />
@@ -54,6 +127,7 @@
 			</c:if>		
 			<br/><br/>
 		</c:forEach>
+	</form>
 	<hr/>
 	<p>
 		<input type="button" value="돌아가기" onclick="location.href='FileUpload4.st';" class="btn btn-warning" />
