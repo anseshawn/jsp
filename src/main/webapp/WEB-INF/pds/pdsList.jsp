@@ -76,6 +76,21 @@
 		</c:forEach>
 		<tr><td colspan="8" class="m-0 p-0"></td></tr>
 	</table>
+	<br/>
+	<!-- 블록페이지 시작 -->	
+	<div class="text-center">
+		<ul class="pagination justify-content-center" style="margin:20px 0">
+			<c:if test="${pag > 1}"><li class="page-item"><a class="page-link" href="${ctp}/PdsList.pds?pag=1&pageSize=${pageSize}&part=${part}">처음</a></li></c:if>
+			<c:if test="${curBlock > 0}"><li class="page-item"><a class="page-link" href="${ctp}/PdsList.pds?pag=${(curBlock-1)*blockSize+1}&pageSize=${pageSize}&part=${part}">이전블록</a></li></c:if>
+			<c:forEach var="i" begin="${(curBlock*blockSize+1)}" end="${(curBlock)*blockSize+blockSize}" varStatus="st">
+				<c:if test="${i <= totPage && i == pag}"><li class="page-item active"><a class="page-link" href="${ctp}/PdsList.pds?pag=${i}&pageSize=${pageSize}&part=${part}">${i}</a></li></c:if>
+				<c:if test="${i <= totPage && i != pag}"><li class="page-item"><a class="page-link" href="${ctp}/PdsList.pds?pag=${i}&pageSize=${pageSize}&part=${part}">${i}</a></li></c:if>
+			</c:forEach>
+			<c:if test="${curBlock < lastBlock}"><li class="page-item"><a class="page-link" href="${ctp}/PdsList.pds?pag=${(curBlock+1)*blockSize+1}&pageSize=${pageSize}&part=${part}">다음블록</a></li></c:if>
+			<c:if test="${pag < totPage}"><li class="page-item"><a class="page-link" href="${ctp}/PdsList.pds?pag=${totPage}&pageSize=${pageSize}&part=${part}">끝</a></li></c:if>
+		</ul>
+	</div>
+	<!-- 블록페이지 끝 -->
 </div>
 <p><br/></p>
 <jsp:include page="/include/footer.jsp" />
