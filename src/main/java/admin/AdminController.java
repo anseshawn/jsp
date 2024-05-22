@@ -19,6 +19,8 @@ import admin.member.MemberDeleteOkCommand;
 import admin.member.MemberLevelChangeCommand;
 import admin.member.MemberListCommand;
 import admin.member.SelectedMemberLevelChangeCommand;
+import admin.review.ReviewDeleteCommand;
+import admin.review.ReviewInputOkCommand;
 
 @WebServlet("*.ad")
 public class AdminController extends HttpServlet {
@@ -36,6 +38,16 @@ public class AdminController extends HttpServlet {
 		
 		if(com.equals("/BoardComplaintInput")) {
 			command = new BoardComplaintInputCommand();
+			command.execute(request, response);
+			return;
+		}
+		else if(com.equals("/ReviewInputOk")) {
+			command = new ReviewInputOkCommand();
+			command.execute(request, response);
+			return;
+		}
+		else if(com.equals("/ReviewDelete")) {
+			command = new ReviewDeleteCommand();
 			command.execute(request, response);
 			return;
 		}
