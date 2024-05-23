@@ -39,3 +39,34 @@ create table review(
 
 desc review;
 
+/* 리뷰에 댓글 달기 */
+create table reviewReply(
+	replyIdx int not null auto_increment,		/* 댓글의 고유번호 */
+	reviewIdx int not null,							/* 원본글(부모글:리뷰)의 고유번호(외래키로 설정) */
+	replyMid varchar(20) not null,			/* 댓글 올린 이의 아이디 */
+	replyNickName varchar(20) not null,	/* 댓글 올린 이의 닉네임 */
+	replyRDate datetime default now(),	/* 댓글 올린 날짜 */
+	replyContent text not null,					/* 댓글 내용 */
+	primary key(replyIdx),
+	foreign key(reviewIdx) references review(idx),
+	foreign key(replyMid) references member(mid)
+);
+desc reviewReply;
+drop table reviewReply;
+
+select * from review order by idx desc;
+select * from review where partIdx=16;
+
+select * from reviewReply order by replyIdx desc;
+
+select * from review v, reviewReply r where v.partIdx=16 and v.idx=r.reviewIdx;
+select * from review v, reviewReply r where v.partIdx=16 and v.idx=r.reviewIdx order by v.idx desc, r.replyIdx desc;
+/* 내부조인이라 댓글이 없는 리뷰는 출력이 되지 않는 현상 발생 */
+
+/* --> 리뷰 부분은 다 보여주고 댓글 부분은 없으면 null로 표시하기 */
+select * from review v left join reviewReply r on v.partIdx=16 and v.idx=r.reviewIdx order by v.idx desc, r.replyIdx desc;
+/* left join이라 review의 모든 내용이 나오게 됨(idx구별없이) */
+
+/* 서브쿼리를 이용하여 review의 특정 idx 중 댓글 표시 */
+select * from (select * from review where partIdx=16) as v left join reviewReply r on v.partIdx=16 and v.idx=r.reviewIdx order by v.idx desc, r.replyIdx desc;
+

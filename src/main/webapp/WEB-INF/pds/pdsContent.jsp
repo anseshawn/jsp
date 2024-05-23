@@ -14,6 +14,28 @@
   <script>
   	'use strict';
   	
+  	// 처음 접속시에는 '리뷰 보이기'버튼을 감추고, '리뷰가리기'버튼과 '리뷰박스'를 보이게 한다.
+  	// $(document).ready(function(){});
+  	$(function(){
+  		$("#reviewShowBtn").hide();
+  		$("#reviewHideBtn").show();
+  		$("#reviewBox").show();
+  	});
+  	
+  	// 리뷰 보이기
+  	function reviewShow(){
+  		$("#reviewShowBtn").hide();
+  		$("#reviewHideBtn").show();
+  		$("#reviewBox").show();  		
+  	}
+  	
+  	// 리뷰 가리기
+  	function reviewHide(){
+  		$("#reviewShowBtn").show();
+  		$("#reviewHideBtn").hide();
+  		$("#reviewBox").hide();  		
+  	}
+  	
   	// 다운로드 수 증가시키기
   	function downNumCheck(idx){
   		$.ajax({
@@ -31,7 +53,7 @@
   	
   	// 화살표 클릭시 화면 상단으로 부드럽게 이동하기
   	$(window).scroll(function(){
-  		if($(this).scrollTop() > 100) {
+  		if($(this).scrollTop() > 100) { // 100픽셀이 넘어가면 버튼 등장
   			$("#topBtn").addClass("on");
   		}
   		else {
@@ -95,11 +117,64 @@
   			}
   		});
   	}
+  	
+  	// 리뷰 댓글달기 폼 보여주기(모달에 내용띄우기)
+  	function reviewReply(idx,nickName,content){
+  		$("#myModal #reviewIdx").val(idx);
+  		$("#myModal #reviewReplyNickName").text(nickName);
+  		$("#myModal #reviewReplyContent").html(content);
+  	}
+  	
+  	// 리뷰 댓글 달기
+  	function reviewReplyCheck() {
+  		let replyContent = reviewReplyForm.replyContent.value;
+  		let reviewIdx = reviewReplyForm.reviewIdx.value;
+  		
+  		if(replyContent.trim() == "") {
+  			alert("댓글 내용을 입력하세요");
+  			return false;
+  		}
+  		
+  		let query = {
+  				reviewIdx : reviewIdx,
+  				replyMid : '${sMid}',
+  				replyNickName : '${sNickName}',
+  				replyContent : replyContent
+  		}
+  		
+  		$.ajax({
+  			url: "ReviewReplyInputOk.ad",
+  			type: "post",
+  			data: query,
+  			success: function(res){
+  				if(res != "0") {
+  					alert("댓글이 등록되었습니다.");
+  					location.reload();
+  				}
+  				else alert("댓글 등록 실패");
+  			},
+  			error: function(){
+  				alert("전송오류");
+  			}
+  		});
+  	}
   </script>
   <style>
   	th {
   		background-color: #eee;
   	}
+  	/* top 버튼 */
+  	h6 {
+		  position: fixed;
+		  right: 1rem;
+		  bottom: -50px;
+		  transition: 0.7s ease;
+		}
+   	.on {
+		  opacity: 0.8;
+		  cursor: pointer;
+		  bottom: 0;
+		}
   	
   	/* 별점 스타일 적용하기 */
   	#starForm fieldset {
@@ -206,28 +281,46 @@
 		</div>
 	</div>
 	<hr/>
+	
 	<div id="reviewBox">
+		<c:set var="imsiIdx" value="0"/>
 		<c:forEach var="vo" items="${rVos}" varStatus="st">
-			<div class="row">
-				<div class="col ml-2">
-					<b>${vo.nickName}</b>
-					<span style="font-size:11px">${fn:substring(vo.rDate, 0, 10)}</span>
-					<c:if test="${vo.mid == sMid || sLevel == 0}"><a href="javascript:reviewDelete(${vo.idx})" title="리뷰삭제" class="badge badge-danger">x</a></c:if>
+		 <!-- 처음에 임시idx에 없는 번호를 배정 후, 반복문이 돌면서 임시idx가 현재 리뷰의 idx가 다른 경우: 새로운 리뷰를 의미함-->
+			<c:if test="${imsiIdx != vo.idx}">
+				<div class="row">
+					<div class="col ml-2">
+						<b>${vo.nickName}</b>
+						<span style="font-size:11px">${fn:substring(vo.rDate, 0, 10)}</span>
+						<c:if test="${vo.mid == sMid || sLevel == 0}"><a href="javascript:reviewDelete(${vo.idx})" title="리뷰삭제" class="badge badge-danger">x</a></c:if>
+						<a href="#" onclick="reviewReply('${vo.idx}','${vo.nickName}','${fn:replace(vo.content,newLine,'<br/>')}')" title="댓글달기" class="badge badge-secondary" data-toggle="modal" data-target="#myModal"><i class="fa-solid fa-reply"></i></a>
+					</div>
+					<div class="col text-right mr-2">
+						<c:forEach var="i" begin="1" end="${vo.star}" varStatus="iSt">
+							<font color="gold"><i class="fa-solid fa-star"></i></font>
+						</c:forEach>
+						<c:forEach var="i" begin="1" end="${5 - vo.star}" varStatus="iSt">
+							<font color="#eee"><i class="fa-regular fa-star"></i></font>
+						</c:forEach>
+					</div>
 				</div>
-				<div class="col text-right mr-2">
-					<c:forEach var="i" begin="1" end="${vo.star}" varStatus="iSt">
-						<font color="gold">⭐</font>
-					</c:forEach>
-					<c:forEach var="i" begin="1" end="${5 - vo.star}" varStatus="iSt">
-						<font color="#eee">⭐</font>
-					</c:forEach>
+				<div class="row border m-1 p-2" style="border-radius:5px">
+					${fn:replace(vo.content, newLine, '<br/>')}
 				</div>
-			</div>
-			<div class="row border m-1 p-2" style="border-radius:5px">
-				${fn:replace(vo.content, newLine, '<br/>')}
-			</div>
-			<hr/>
+			</c:if>
+			<c:set var="imsiIdx" value="${vo.idx}"/>
+			<!-- 댓글이 있을 경우에만 댓글 출력 -->
+			<c:if test="${!empty vo.replyContent}">
+				<div class="d-flex text-secondary">
+					<div class="mt-2 ml-3">└─▶ </div>
+					<div class="mt-2 ml-2">${vo.replyNickName}
+						<span style="font-size:11px">${fn:substring(vo.replyRDate,0,10)}</span>
+						<c:if test="${vo.replyMid == sMid || sLevel == 0}"><a href="javascript:reviewReplyDelete(${vo.replyIdx})" title="댓글삭제" class="badge badge-danger">x</a></c:if>
+						<br/>${fn:replace(vo.replyContent,newLine,'<br/>')}
+					</div>
+				</div>
+			</c:if>
 		</c:forEach>
+		
 	</div>
 	
 	<hr/>
@@ -249,6 +342,49 @@
 	<h6 id="topBtn" class="text-right mr-3"><img src="${ctp}/images/top.gif" title="위로이동"/></h6>
 </div>
 <p><br/></p>
+
+
+<!-- 댓글 모달창 -->
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+    
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">>> 댓글 달기</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      
+      <!-- Modal body -->
+      <div class="modal-body">
+      	<form name="reviewReplyForm" class="was-validated">
+      		<table class="table table-bordered">
+      			<tr>
+      				<th style="width:25%">원본글 작성자</th>
+      				<td style="width:75%"><span id="reviewReplyNickName"></span></td>
+      			</tr>
+      			<tr>
+      				<th>원본글</th>
+      				<td><span id="reviewReplyContent"></span></td>
+      			</tr>
+      		</table>
+      		<hr/>
+      		댓글 작성자 : ${sNickName}<br/>
+      		댓글 내용 : <textarea rows="3" name="replyContent" id="replyContent" class="form-control" required></textarea><br/>
+      		<input type="button" value="댓글등록" onclick="reviewReplyCheck()" class="btn btn-success form-control" />
+      		<input type="hidden" name="reviewIdx" id="reviewIdx"/>
+      	</form>
+      </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <jsp:include page="/include/footer.jsp" />
 </body>
 </html>
