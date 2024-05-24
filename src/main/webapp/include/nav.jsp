@@ -66,6 +66,13 @@
 			      <a class="dropdown-item" href="FileUpload.st">파일업로드</a>
 			    </div>
 	      </li>
+	      <li class="nav-item dropdown">
+			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Study3</a>
+			    <div class="dropdown-menu">
+			      <a class="dropdown-item" href="Calendar1.st">달력연습1</a>
+			      <a class="dropdown-item" href="Calendar2.st">달력연습2</a>
+			    </div>
+	      </li>
 			</c:if>
      </ul>
 		<ul class="navbar-nav ml-auto">
@@ -75,7 +82,7 @@
 		    <div class="dropdown-menu">
 		      <a class="dropdown-item" href="MemberMain.mem">회원메인화면</a>
 		      <c:if test="${level<=4 && (level > 1 || level==0)}">
-			      <a class="dropdown-item" href="#">일정관리</a>
+			      <a class="dropdown-item" href="Schedule.sc">일정관리</a>
 			      <a class="dropdown-item" href="#">메세지관리</a>
 			      <a class="dropdown-item" href="MemberList.mem">회원리스트</a>
 		      </c:if>
