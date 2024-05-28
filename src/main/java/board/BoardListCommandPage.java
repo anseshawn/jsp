@@ -21,7 +21,7 @@ public class BoardListCommandPage implements BoardInterface {
 		int pageSize = request.getParameter("pageSize")==null ? 10 : Integer.parseInt(request.getParameter("pageSize"));
 		int totRecCnt = dao.getTotRecCnt();
 		
-		int startIndexNo = Pagination2.pageChange(request, pag, pageSize, totRecCnt);
+		int startIndexNo = (pag - 1) * pageSize;
 		int totPage = (totRecCnt % pageSize)==0 ? (totRecCnt / pageSize) : (totRecCnt / pageSize)+1;
 		if(pag > totPage) pag = 1;
 		// 페이징 처리 끝

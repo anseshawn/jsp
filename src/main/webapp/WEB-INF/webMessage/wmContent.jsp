@@ -33,10 +33,17 @@
 		</tr>
 		<tr>
 			<td colspan="2" class="text-center">
-				<input type="button" value="답장하기" onclick="location.href='WebMessage.wm?mSw=0&receiveId=${vo.sendId}';" class="btn btn-primary"/>
-				<input type="button" value="삭제하기" onclick="location.href='WmDeleteCheck.wm?mSw=${param.mFlag}&idx=${vo.idx}';" class="btn btn-danger"/>
-				<input type="button" value="돌아가기" onclick="location.href='WebMessage.wm?mSw=1&mFlag=11';" class="btn btn-secondary"/>
-			</td>
+        <c:if test="${param.mFlag==11 || param.mFlag==12}">
+        	<input type="button" value="답장하기" onclick="location.href='WebMessage.wm?mSw=0&receiveId=${vo.sendId}';" class="btn btn-success"/>
+        </c:if>
+        <c:if test="${param.mFlag == 15}">
+        	<input type="button" value="복원하기" onclick="location.href='WmRestore.wm?idx=${vo.idx}';" class="btn btn-success"/>
+        </c:if>
+        <c:if test="${param.mFlag != 15}">
+          <input type="button" value="휴지통으로" onclick="location.href='WmDeleteCheck.wm?idx=${vo.idx}&mFlag=${param.mFlag}';" class="btn btn-danger"/>
+        </c:if>
+        <input type="button" value="돌아가기" onclick="location.href='WebMessage.wm?mFlag=${param.mFlag}';" class="btn btn-warning"/>
+      </td>
 		</tr>
 	</table>
 </div>
