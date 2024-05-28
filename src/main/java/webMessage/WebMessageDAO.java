@@ -43,30 +43,38 @@ public class WebMessageDAO {
 		try {
 			if(mSw == 1) { // 받은메세지(처음에는 전체메세지(새메세지+읽은메세지))
 				sql = "select *,timestampdiff(hour,sendDate,now()) as hour_diff from webMessage"
-						+ " where receiveId=? and (receiveSw='n' or receiveSw='r') order by idx desc";				
+						+ " where receiveId=? and (receiveSw='n' or receiveSw='r') order by idx desc limit ?,?";				
 			}
 			else if(mSw == 2) { // 신규 메세지
 				sql = "select *,timestampdiff(hour,sendDate,now()) as hour_diff from webMessage"
-						+ " where receiveId=? and receiveSw='n' order by idx desc";				
+						+ " where receiveId=? and receiveSw='n' order by idx desc limit ?,?";				
 			}
 			else if(mSw == 3) { // 보낸 메세지
 				sql = "select *,timestampdiff(hour,sendDate,now()) as hour_diff from webMessage"
-						+ " where sendId=? and sendSw='s' order by idx desc";				
+						+ " where sendId=? and sendSw='s' order by idx desc limit ?,?";				
 			}
 			else if(mSw == 4) { // 수신확인
 				sql = "select *,timestampdiff(hour,sendDate,now()) as hour_diff from webMessage"
-						+ " where sendId=? and receiveSw='n' order by idx desc";				
+						+ " where sendId=? and receiveSw='n' order by idx desc limit ?,?";				
 			}
 			else if(mSw == 5) { // 휴지통
 				sql = "select *,timestampdiff(hour,sendDate,now()) as hour_diff from webMessage"
-						+ " where (receiveId=? and receiveSw='g') or (sendId=? and sendSw='g') order by idx desc";				
+						+ " where (receiveId=? and receiveSw='g') or (sendId=? and sendSw='g') order by idx desc limit ?,?";				
 			}
 			else { // mSw가 0번 혹은 6번일때
 				return vos;				
 			}
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, mid);
-			if(mSw == 5) pstmt.setString(2, mid);
+			if(mSw == 5) {
+				pstmt.setString(2, mid);
+				pstmt.setInt(3, startIndexNo);
+				pstmt.setInt(4, pageSize);
+			}
+			else {
+				pstmt.setInt(2, startIndexNo);
+				pstmt.setInt(3, pageSize);
+			}
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {

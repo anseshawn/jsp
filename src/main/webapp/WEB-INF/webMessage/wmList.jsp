@@ -46,9 +46,9 @@
 <body>
 <p><br/></p>
 <div class="container">
-	<table class="table table-hover">
-  	<tr class="table-dark text-dark">
-    	<th>번호</th>
+  <table class="table table-hover">
+    <tr class="table-dark text-dark">
+      <th>번호</th>
       <th>제목</th>
       <th>
         <c:if test="${mSw==1 || mSw==2 || mSw==5}">보낸사람</c:if>

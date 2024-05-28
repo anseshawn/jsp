@@ -35,7 +35,7 @@ public class WebMessageCommand implements WebMessageInterface {
 		WebMessageDAO dao = new WebMessageDAO();
 		WebMessageVO vo = null;
 		
-		if(mSw == 6) {
+		if(mSw == 6) { // '메세지 내용보기' 처리하기
 			vo = dao.getWebMessageContent(idx,mFlag);
 			request.setAttribute("vo", vo);
 		}
@@ -51,7 +51,6 @@ public class WebMessageCommand implements WebMessageInterface {
 		  
 		  int totRecCnt = dao.getWmTotRecCnt(mid, mSw);
 		  int startIndexNo = (pag - 1) * pageSize;
-			
 			ArrayList<WebMessageVO> vos = dao.getMessageList(mid, mSw, startIndexNo, pageSize);
 			request.setAttribute("vos", vos);
 			
