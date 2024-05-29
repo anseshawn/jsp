@@ -73,6 +73,7 @@
 			      <a class="dropdown-item" href="Calendar2.st">달력연습2</a>
 			      <a class="dropdown-item" href="ScrollStudy.st">스크롤연습</a>
 			      <a class="dropdown-item" href="ScrollBasic.st">무한스크롤</a>
+			      <a class="dropdown-item" href="Transaction.st">트랜잭션연습</a>
 			    </div>
 	      </li>
 			</c:if>
