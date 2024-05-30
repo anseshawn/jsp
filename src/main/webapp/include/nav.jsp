@@ -74,6 +74,8 @@
 			      <a class="dropdown-item" href="ScrollStudy.st">스크롤연습</a>
 			      <a class="dropdown-item" href="ScrollBasic.st">무한스크롤</a>
 			      <a class="dropdown-item" href="Transaction.st">트랜잭션연습</a>
+			      <a class="dropdown-item" href="Translator.st">웹번역</a>
+			      <a class="dropdown-item" href="Error.st">에러페이지</a>
 			    </div>
 	      </li>
 			</c:if>
